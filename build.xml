@@ -1,0 +1,34 @@
+<?xml version="1.0" standalone="yes"?>
+<project name="react" default="aslib" basedir="." xmlns:artifact="urn:maven-artifact-ant">
+  <property name="asrc.dir" location="src/main/as"/>
+  <property name="deploy.dir" location="dist"/>
+
+  <property name="ooo-build.vers" value="2.5"/>
+  <ant antfile="etc/bootstrap.xml"/>
+  <import file="${user.home}/.m2/ooo-build/${ooo-build.vers}/ooo-build.xml"/>
+
+  <target name="-prepare" depends="-init-ooo">
+    <maventaskdef groupId="com.threerings.ant" artifactId="actionscript" version="1.6"/>
+  </target>
+
+  <target name="clean" description="Removes all generated files and directories">
+    <delete dir="${deploy.dir}"/>
+  </target>
+
+  <target name="aslib" depends="-prepare" description="Builds the library (.swc file)">
+    <mkdir dir="${deploy.dir}"/>
+    <compc srcdir="${asrc.dir}" dest="${deploy.dir}/${ant.project.name}.swc"/>
+  </target>
+
+  <target name="asdoc" depends="-prepare" description="Builds the documentation">
+    <mkdir dir="${deploy.dir}/asdocs"/>
+    <asdoc srcdir="${asrc.dir}" destdir="${deploy.dir}/asdocs"/>
+  </target>
+
+  <!-- Set maven.deploy.repo to deploy to a local maven repo:
+        ant -Dmaven.deploy.repo=file:///path/to/local/repo maven-deploy -->
+  <target name="maven-deploy" depends="aslib"
+          description="Deploys build artifacts to a Maven repository.">
+    <mavendeploy file="${deploy.dir}/${ant.project.name}.swc" pom="pom.xml" srcdir="${asrc.dir}"/>
+  </target>
+</project>
