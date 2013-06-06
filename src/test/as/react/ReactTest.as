@@ -9,6 +9,7 @@ public class ReactTest extends Sprite
 {
     public function ReactTest() {
         signalTest();
+        valueTest();
     }
 
     protected function signalTest () :void {
@@ -23,6 +24,18 @@ public class ReactTest extends Sprite
         suite.testSingleFailure();
         suite.testMultiFailure();
         suite.testMappedSignal();
+    }
+
+    protected function valueTest () :void {
+        var suite :ValueTest = new ValueTest();
+        suite.testSimpleListener();
+        suite.testAsSignal();
+        suite.testAsOnceSignal();
+        suite.testMappedValue();
+        suite.testConnectNotify();
+        suite.testListenNotify();
+        suite.testDisconnect();
+        suite.testSlot();
     }
 }
 }

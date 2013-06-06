@@ -152,13 +152,9 @@ public class SignalTest
         }, MultiFailureError);
     }
 
-    protected static function to_string (val :Object) :String {
-        return "" + val;
-    }
-
     public function testMappedSignal () :void {
         var signal :Signal = new Signal();
-        var mapped :SignalView = signal.map(to_string);
+        var mapped :SignalView = signal.map(toString);
 
         var counter :Counter = new Counter();
         var c1 :Connection = mapped.connect(counter);
@@ -180,16 +176,6 @@ public class SignalTest
 
 import react.Slot;
 import react.UnitSlot;
-
-class Counter extends UnitSlot {
-    public var notifies :int;
-    public function Counter () :void {
-        super(function () :void {});
-    }
-    override public function onEmit (event :Object) :void {
-        notifies++;
-    }
-}
 
 class AccSlot extends Slot {
     public var events :Vector.<Object> = new Vector.<Object>();
