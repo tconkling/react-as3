@@ -48,7 +48,7 @@ public /*abstract*/ class MappedValue extends AbstractValue
 
 import react.Connection;
 import react.MappedValue;
-import react.Slot;
+import react.ValueListener;
 import react.ValueView;
 
 class MappedValueImpl extends MappedValue {
@@ -57,12 +57,12 @@ class MappedValueImpl extends MappedValue {
         _f = f;
     }
 
-    override public function get () :Object {
+    override public function get () :* {
         return _f(_source.get());
     }
 
     override protected function connectToSource () :Connection {
-        return _source.connect(Slot.create(onSourceChange));
+        return _source.connect(ValueListener.create(onSourceChange));
     }
 
     protected function onSourceChange (value :Object, ovalue :Object) :void {

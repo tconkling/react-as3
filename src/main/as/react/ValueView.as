@@ -14,7 +14,7 @@ public interface ValueView
     /**
      * Returns the current value.
      */
-    function get () :Object;
+    function get () :*;
 
     /**
      * Creates a value that maps this value via a function. When this value changes, the mapped

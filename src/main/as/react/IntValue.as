@@ -38,7 +38,7 @@ public class IntValue extends AbstractValue
         return Slot.create(update);
     }
 
-    override public function get () :Object {
+    override public function get () :* {
         return _value;
     }
 

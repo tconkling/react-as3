@@ -14,7 +14,7 @@ import flash.errors.IllegalOperationError;
 public /*abstract*/ class AbstractValue extends Reactor
     implements ValueView
 {
-    public /*abstract*/ function get () :Object {
+    public /*abstract*/ function get () :* {
         throw new IllegalOperationError("abstract");
     }
 
