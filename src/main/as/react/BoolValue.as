@@ -3,16 +3,16 @@
 
 package react {
 
-public class IntValue extends AbstractValue
+public class BoolValue extends AbstractValue
 {
     /**
      * Creates an instance with the supplied starting value.
      */
-    public function IntValue (value :int) {
+    public function BoolValue (value :Boolean) {
         _value = value;
     }
 
-    public function get value () :int {
+    public function get value () :Boolean {
         return _value;
     }
 
@@ -21,8 +21,8 @@ public class IntValue extends AbstractValue
      * value differs from the current value, as determined via {@link Object#equals}.
      * @return the previous value contained by this instance.
      */
-    public function update (value :int) :int {
-        return updateAndNotifyIf(value) as int;
+    public function update (value :Boolean) :Boolean {
+        return updateAndNotifyIf(value) as Boolean;
     }
 
     /**
@@ -30,8 +30,8 @@ public class IntValue extends AbstractValue
      * of whether the new value is equal to the old value.
      * @return the previous value contained by this instance.
      */
-    public function updateForce (value :int) :int {
-        return updateAndNotify(value) as int;
+    public function updateForce (value :Boolean) :Boolean {
+        return updateAndNotify(value) as Boolean;
     }
 
     /**
@@ -47,11 +47,11 @@ public class IntValue extends AbstractValue
     }
 
     override protected function updateLocal (value :Object) :Object {
-        var oldValue :int = _value;
-        _value = value as int;
+        var oldValue :Boolean = _value;
+        _value = value as Boolean;
         return oldValue;
     }
 
-    protected var _value :int;
+    protected var _value :Boolean;
 }
 }
