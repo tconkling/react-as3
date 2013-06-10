@@ -14,6 +14,10 @@ public /*abstract*/ class Slot extends ValueListener
         return new SlotImpl(onEmit);
     }
 
+    public static function createUnit (onEmit :Function) :Slot {
+        return new UnitSlotImpl(onEmit);
+    }
+
     /**
      * Called when a signal to which this slot is connected has emitted an event.
      * @param event the event emitted by the signal.
@@ -57,6 +61,18 @@ public /*abstract*/ class Slot extends ValueListener
 }
 
 import react.Slot;
+
+class UnitSlotImpl extends Slot {
+    public function UnitSlotImpl (onEmit :Function) {
+        _onEmit = onEmit;
+    }
+
+    override public function onEmit (event :Object) :void {
+        _onEmit();
+    }
+
+    protected var _onEmit :Function;
+}
 
 class SlotImpl extends Slot {
     public function SlotImpl (onEmit :Function) {

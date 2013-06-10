@@ -57,7 +57,7 @@ public class SignalTest
         var signal :Signal = new Signal();
         var toAdd :AccSlot = new AccSlot();
 
-        signal.connect(UnitSlot.create(function () :void {
+        signal.connect(Slot.createUnit(function () :void {
             signal.connect(toAdd);
         })).once();
 
@@ -80,7 +80,7 @@ public class SignalTest
         assertEquals(new <Object>[5], toRemove.events);
 
         // now add our removing signal, and dispatch again
-        signal.connect(UnitSlot.create(function () :void {
+        signal.connect(Slot.createUnit(function () :void {
             rconn.disconnect();
         })).atPriority(1); // ensure that we're before toRemove
         signal.emit(42);
@@ -104,7 +104,7 @@ public class SignalTest
         assertEquals(new <Object>[5], toRemove.events);
 
         // now add our adder/remover signal, and dispatch again
-        signal.connect(UnitSlot.create(function () :void {
+        signal.connect(Slot.createUnit(function () :void {
             rconn.disconnect();
             signal.connect(toAdd);
         }));
@@ -122,7 +122,7 @@ public class SignalTest
     public function testUnitSlot () :void {
         var signal :Signal = new Signal();
         var fired :Boolean = false;
-        signal.connect(UnitSlot.create(function () :void {
+        signal.connect(Slot.createUnit(function () :void {
             fired = true;
         }));
         signal.emit(42);
@@ -132,7 +132,7 @@ public class SignalTest
     public function testSingleFailure () :void {
         assertThrows(function () :void {
             var signal :UnitSignal = new UnitSignal();
-            signal.connect(UnitSlot.create(function () :void {
+            signal.connect(Slot.createUnit(function () :void {
                 throw new Error("Bang!");
             }));
             signal.emit();
@@ -142,10 +142,10 @@ public class SignalTest
     public function testMultiFailure () :void {
         assertThrows(function () :void {
             var signal :UnitSignal = new UnitSignal();
-            signal.connect(UnitSlot.create(function () :void {
+            signal.connect(Slot.createUnit(function () :void {
                 throw new Error("Bing!");
             }));
-            signal.connect(UnitSlot.create(function () :void {
+            signal.connect(Slot.createUnit(function () :void {
                 throw new Error("Bang!");
             }));
             signal.emit();
@@ -175,7 +175,6 @@ public class SignalTest
 }
 
 import react.Slot;
-import react.UnitSlot;
 
 class AccSlot extends Slot {
     public var events :Vector.<Object> = new Vector.<Object>();
@@ -184,12 +183,11 @@ class AccSlot extends Slot {
     }
 }
 
-class PriorityTestSlot extends UnitSlot {
+class PriorityTestSlot extends Slot {
     public var order :int;
     public var counter :Object;
 
     public function PriorityTestSlot (counter :Object) {
-        super(function () :void {});
         this.counter = counter;
     }
 
