@@ -34,14 +34,6 @@ public class NumberValue extends AbstractValue
         return updateAndNotify(value) as Number;
     }
 
-    /**
-     * Returns a slot which can be used to wire this value to the emissons of a {@link Signal} or
-     * another value.
-     */
-    public function slot () :Slot {
-        return Slot.create(update);
-    }
-
     override public function get () :* {
         return _value;
     }

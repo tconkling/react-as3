@@ -22,18 +22,18 @@ public /*abstract*/ class AbstractValue extends Reactor
         return MappedValue.create(this, func);
     }
 
-    public function connect (listener :ValueListener) :Connection {
+    public function connect (listener :Function) :Connection {
         return addConnection(listener);
     }
 
-    public function connectNotify (listener :ValueListener) :Connection {
+    public function connectNotify (listener :Function) :Connection {
         // connect before calling emit; if the listener changes the value in the body of onEmit, it
         // will expect to be notified of that change; however if onEmit throws a runtime exception,
         // we need to take care of disconnecting the listener because the returned connection
         // instance will never reach the caller
         var conn :Connection = connect(listener);
         try {
-            listener.onChange(get(), null);
+            Cons(conn).listener.onChange(get(), null);
         } catch (e :Error) {
             conn.disconnect();
             throw e;
@@ -41,7 +41,7 @@ public /*abstract*/ class AbstractValue extends Reactor
         return conn;
     }
 
-    public function disconnect (listener :ValueListener) :void {
+    public function disconnect (listener :Function) :void {
         removeConnection(listener);
     }
 
@@ -87,7 +87,7 @@ public /*abstract*/ class AbstractValue extends Reactor
         try {
             for (var cons :Cons = lners; cons != null; cons = cons.next) {
                 try {
-                    ValueListener(cons.listener).onChange(value, ovalue);
+                    cons.listener.onChange(value, ovalue);
                 } catch (e :Error) {
                     if (error == null) {
                         error = new MultiFailureError();

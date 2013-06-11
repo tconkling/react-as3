@@ -3,6 +3,8 @@
 
 package react {
 
+import flash.errors.IllegalOperationError;
+
 /**
  * Handles the machinery of connecting slots to a signal and emitting events to them, without
  * exposing a public interface for emitting events. This can be used by entities which wish to
@@ -15,11 +17,11 @@ public class AbstractSignal extends Reactor
         return MappedSignal.create(this, func);
     }
 
-    public function connect (slot :Slot) :Connection {
+    public function connect (slot :Function) :Connection {
         return addConnection(slot);
     }
 
-    public function disconnect (slot :Slot) :void {
+    public function disconnect (slot :Function) :void {
         removeConnection(slot);
     }
 
@@ -32,7 +34,7 @@ public class AbstractSignal extends Reactor
         try {
             for (var cons :Cons = lners; cons != null; cons = cons.next) {
                 try {
-                    Slot(cons.listener).onEmit(event);
+                    cons.listener.onEmit(event);
                 } catch (e :Error) {
                     if (error == null) {
                         error = new MultiFailureError();

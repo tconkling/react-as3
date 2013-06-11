@@ -73,10 +73,10 @@ internal class Cons implements Connection
         }
     }
 
-    internal static function removeAll (head :Cons, listener :RListener) :Cons {
+    internal static function removeAll (head :Cons, listener :Function) :Cons {
         if (head == null) {
             return null;
-        } else if (head.listener == listener) {
+        } else if (head.listener.f == listener) {
             return removeAll(head.next, listener);
         } else {
             head.next = removeAll(head.next, listener);

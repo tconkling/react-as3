@@ -14,13 +14,5 @@ public class UnitSignal extends AbstractSignal
     public function emit () :void {
         notifyEmit(null);
     }
-
-    /**
-     * Returns a slot which can be used to wire this signal to the emissons of a {@link Signal} or
-     * another value.
-     */
-    public function slot () :Slot {
-        return Slot.createUnit(emit);
-    }
 }
 }

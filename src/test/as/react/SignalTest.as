@@ -8,16 +8,16 @@ package react {
  */
 public class SignalTest
 {
-    public static function require (reqValue :Object) :Slot {
-        return Slot.create(function (value :Object) :void {
+    public static function require (reqValue :Object) :Function {
+        return function (value :Object) :void {
             assertEquals(reqValue, value);
-        });
+        };
     }
 
     public function testSignalToSlot () :void {
         var signal :Signal = new Signal();
         var slot :AccSlot = new AccSlot();
-        signal.connect(slot);
+        signal.connect(slot.onEmit);
         signal.emit(1);
         signal.emit(2);
         signal.emit(3);
@@ -27,7 +27,7 @@ public class SignalTest
     public function testOneShotSlot () :void {
         var signal :Signal = new Signal();
         var slot :AccSlot = new AccSlot();
-        signal.connect(slot).once();
+        signal.connect(slot.onEmit).once();
         signal.emit(1); // slot should be removed after this emit
         signal.emit(2);
         signal.emit(3);
@@ -42,10 +42,10 @@ public class SignalTest
         var slot4 :PriorityTestSlot = new PriorityTestSlot(counter);
 
         var signal :UnitSignal = new UnitSignal();
-        signal.connect(slot3).atPriority(3);
-        signal.connect(slot1).atPriority(1);
-        signal.connect(slot2).atPriority(2);
-        signal.connect(slot4).atPriority(4);
+        signal.connect(slot3.onEmit).atPriority(3);
+        signal.connect(slot1.onEmit).atPriority(1);
+        signal.connect(slot2.onEmit).atPriority(2);
+        signal.connect(slot4.onEmit).atPriority(4);
         signal.emit();
         assertEquals(1, slot1.order);
         assertEquals(2, slot2.order);
@@ -57,9 +57,9 @@ public class SignalTest
         var signal :Signal = new Signal();
         var toAdd :AccSlot = new AccSlot();
 
-        signal.connect(Slot.createUnit(function () :void {
-            signal.connect(toAdd);
-        })).once();
+        signal.connect(function () :void {
+            signal.connect(toAdd.onEmit);
+        }).once();
 
         // this will connect our new signal but not dispatch to it
         signal.emit(5);
@@ -73,16 +73,16 @@ public class SignalTest
     public function testRemoveDuringDispatch () :void {
         var signal :Signal = new Signal();
         var toRemove :AccSlot = new AccSlot();
-        var rconn :Connection = signal.connect(toRemove);
+        var rconn :Connection = signal.connect(toRemove.onEmit);
 
         // dispatch one event and make sure it's received
         signal.emit(5);
         assertEquals(new <Object>[5], toRemove.events);
 
         // now add our removing signal, and dispatch again
-        signal.connect(Slot.createUnit(function () :void {
+        signal.connect(function () :void {
             rconn.disconnect();
-        })).atPriority(1); // ensure that we're before toRemove
+        }).atPriority(1); // ensure that we're before toRemove
         signal.emit(42);
 
         // since toRemove will have been removed during this dispatch, it will receive the signal
@@ -97,17 +97,17 @@ public class SignalTest
         var signal :Signal = new Signal();
         var toAdd :AccSlot = new AccSlot();
         var toRemove :AccSlot = new AccSlot();
-        var rconn :Connection = signal.connect(toRemove);
+        var rconn :Connection = signal.connect(toRemove.onEmit);
 
         // dispatch one event and make sure it's received by toRemove
         signal.emit(5);
         assertEquals(new <Object>[5], toRemove.events);
 
         // now add our adder/remover signal, and dispatch again
-        signal.connect(Slot.createUnit(function () :void {
+        signal.connect(function () :void {
             rconn.disconnect();
-            signal.connect(toAdd);
-        }));
+            signal.connect(toAdd.onEmit);
+        });
         signal.emit(42);
         // make sure toRemove got this event and toAdd didn't
         assertEquals(new <Object>[5, 42], toRemove.events);
@@ -122,9 +122,9 @@ public class SignalTest
     public function testUnitSlot () :void {
         var signal :Signal = new Signal();
         var fired :Boolean = false;
-        signal.connect(Slot.createUnit(function () :void {
+        signal.connect(function () :void {
             fired = true;
-        }));
+        });
         signal.emit(42);
         assert(fired);
     }
@@ -132,9 +132,9 @@ public class SignalTest
     public function testSingleFailure () :void {
         assertThrows(function () :void {
             var signal :UnitSignal = new UnitSignal();
-            signal.connect(Slot.createUnit(function () :void {
+            signal.connect(function () :void {
                 throw new Error("Bang!");
-            }));
+            });
             signal.emit();
         });
     }
@@ -142,12 +142,12 @@ public class SignalTest
     public function testMultiFailure () :void {
         assertThrows(function () :void {
             var signal :UnitSignal = new UnitSignal();
-            signal.connect(Slot.createUnit(function () :void {
+            signal.connect(function () :void {
                 throw new Error("Bing!");
-            }));
-            signal.connect(Slot.createUnit(function () :void {
+            });
+            signal.connect(function () :void {
                 throw new Error("Bang!");
-            }));
+            });
             signal.emit();
         }, MultiFailureError);
     }
@@ -157,7 +157,7 @@ public class SignalTest
         var mapped :SignalView = signal.map(toString);
 
         var counter :Counter = new Counter();
-        var c1 :Connection = mapped.connect(counter);
+        var c1 :Connection = mapped.connect(counter.onEmit);
         var c2 :Connection = mapped.connect(SignalTest.require("15"));
 
         signal.emit(15);
@@ -174,16 +174,14 @@ public class SignalTest
 
 }
 
-import react.Slot;
-
-class AccSlot extends Slot {
+class AccSlot {
     public var events :Vector.<Object> = new Vector.<Object>();
-    override public function onEmit (event :Object) :void {
+    public function onEmit (event :Object) :void {
         events.push(event);
     }
 }
 
-class PriorityTestSlot extends Slot {
+class PriorityTestSlot  {
     public var order :int;
     public var counter :Object;
 
@@ -191,7 +189,7 @@ class PriorityTestSlot extends Slot {
         this.counter = counter;
     }
 
-    override public function onEmit (event :Object) :void {
+    public function onEmit (event :Object) :void {
         order = ++(counter.val);
     }
 }

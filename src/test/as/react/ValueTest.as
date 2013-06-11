@@ -11,11 +11,11 @@ public class ValueTest
     public function testSimpleListener () :void {
         var value :IntValue = new IntValue(42);
         var fired :Boolean = false;
-        value.connect(ValueListener.create(function (nvalue :int, ovalue :int) :void {
+        value.connect(function (nvalue :int, ovalue :int) :void {
             assertEquals(42, ovalue);
             assertEquals(15, nvalue);
             fired = true;
-        }));
+        });
 
         assertEquals(42, value.update(15));
         assertEquals(15, value.get());
@@ -25,10 +25,10 @@ public class ValueTest
     public function testAsSignal () :void {
         var value :IntValue = new IntValue(42);
         var fired :Boolean = false;
-        value.connect(Slot.create(function (value :int) :void {
+        value.connect(function (value :int) :void {
             assertEquals(15, value);
             fired = true;
-        }));
+        });
         value.update(15);
         assert(fired);
     }
@@ -36,7 +36,7 @@ public class ValueTest
     public function testAsOnceSignal () :void {
         var value :IntValue = new IntValue(42);
         var counter :Counter = new Counter();
-        value.connect(counter).once();
+        value.connect(counter.onEmit).once();
         value.update(15);
         value.update(42);
         assertEquals(1, counter.notifies);
@@ -47,7 +47,7 @@ public class ValueTest
         var mapped :ValueView = value.map(toString);
 
         var counter :Counter = new Counter();
-        var c1 :Connection = mapped.connect(counter);
+        var c1 :Connection = mapped.connect(counter.onEmit);
         var c2 :Connection = mapped.connect(SignalTest.require("15"));
 
         value.update(15);
@@ -66,20 +66,20 @@ public class ValueTest
     public function testConnectNotify () :void {
         var value :IntValue = new IntValue(42);
         var fired :Boolean = false;
-        value.connectNotify(Slot.create(function (val :int) :void {
+        value.connectNotify(function (val :int) :void {
             assertEquals(42, val);
             fired = true;
-        }));
+        });
         assert(fired);
     }
 
     public function testListenNotify () :void {
         var value :IntValue = new IntValue(42);
         var fired :Boolean = false;
-        value.connectNotify(Slot.create(function (val :int) :void {
+        value.connectNotify(function (val :int) :void {
             assertEquals(42, val);
             fired = true;
-        }));
+        });
         assert(fired);
     }
 
@@ -88,11 +88,11 @@ public class ValueTest
         var expectedValue :int = value.get();
         var fired :int = 0;
 
-        var listener :Slot = Slot.create(function (newValue :int) :void {
+        var listener :Function = function (newValue :int) :void {
             assertEquals(expectedValue, newValue);
             fired += 1;
             value.disconnect(listener);
-        });
+        };
 
         var conn :Connection = value.connectNotify(listener);
         value.update((expectedValue = 12));
@@ -100,7 +100,7 @@ public class ValueTest
         conn.disconnect();// Just see what happens when calling disconnect while disconnected
 
         value.connect(listener);
-        value.connect(new Counter());
+        value.connect(new Counter().onEmit);
         value.connect(listener);
         value.update((expectedValue = 13));
         value.update((expectedValue = 14));
@@ -115,11 +115,11 @@ public class ValueTest
         var value :IntValue = new IntValue(42);
         var expectedValue :int = value.get();
         var fired :int = 0;
-        var listener :Slot = Slot.create(function (newValue :int) :void {
+        var listener :Function = function (newValue :int) :void {
             assertEquals(expectedValue, newValue);
             fired += 1;
             value.disconnect(listener);
-        });
+        };
         value.connect(listener);
         value.update((expectedValue = 12));
         assertEquals(1, fired, "Calling disconnect with a slot disconnects");

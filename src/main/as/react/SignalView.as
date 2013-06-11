@@ -18,18 +18,18 @@ public interface SignalView
     function map (func :Function) :SignalView;
 
     /**
-     * Connects this signal to the supplied slot, such that when an event is emitted from this
-     * signal, the slot will be notified.
+     * Connects this signal to the supplied function, such that when an event is emitted from this
+     * signal, the function will be called.
      *
      * @return a connection instance which can be used to cancel the connection.
      */
-    function connect (slot :Slot) :Connection;
+    function connect (slot :Function) :Connection;
 
     /**
-     * Disconnects the supplied slot from this signal if connect was called with it. If the slot has
+     * Disconnects the supplied function from this signal if connect was called with it. If the slot has
      * been connected multiple times, all connections are cancelled.
      */
-    function disconnect (slot :Slot) :void;
+    function disconnect (slot :Function) :void;
 }
 
 }

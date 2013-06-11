@@ -10,18 +10,17 @@ package react {
 public class Signal extends AbstractSignal
 {
     /**
+     * Constructs a new Signal.
+     * The optional eventType parameter exists purely for documentation purposes.
+     */
+    public function Signal (eventType :Class = null) {
+    }
+
+    /**
      * Causes this signal to emit the supplied event to connected slots.
      */
     public function emit (event :Object) :void {
         notifyEmit(event);
-    }
-
-    /**
-     * Returns a slot which can be used to wire this signal to the emissons of a {@link Signal} or
-     * another value.
-     */
-    public function slot () :Slot {
-        return Slot.create(emit);
     }
 }
 

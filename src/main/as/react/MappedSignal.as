@@ -49,7 +49,6 @@ public /*abstract*/ class MappedSignal extends AbstractSignal
 import react.Connection;
 import react.MappedSignal;
 import react.SignalView;
-import react.Slot;
 
 class MappedSignalImpl extends MappedSignal {
     public function MappedSignalImpl (source :SignalView, f :Function) {
@@ -58,7 +57,7 @@ class MappedSignalImpl extends MappedSignal {
     }
 
     override protected function connectToSource () :Connection {
-        return _source.connect(Slot.create(onSourceEmit));
+        return _source.connect(onSourceEmit);
     }
 
     protected function onSourceEmit (value :Object) :void {

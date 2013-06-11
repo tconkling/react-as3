@@ -16,11 +16,11 @@ public /*abstract*/ class Reactor
         return _listeners != null;
     }
 
-    public function addConnection (listener :RListener) :Cons {
+    public function addConnection (listener :Function) :Cons {
         if (listener == null) {
             throw new ArgumentError("Null listener");
         }
-        return addCons(new Cons(this, listener));
+        return addCons(new Cons(this, RListener.create(listener)));
     }
 
     public function addCons (cons :Cons) :Cons {
@@ -67,7 +67,7 @@ public /*abstract*/ class Reactor
         }
     }
 
-    protected function removeConnection (listener :RListener) :void {
+    protected function removeConnection (listener :Function) :void {
         if (this.isDispatching) {
             _pendingRuns = insert(_pendingRuns, new Runs(function () :void {
                 _listeners = Cons.removeAll(_listeners, listener);

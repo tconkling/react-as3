@@ -3,13 +3,11 @@
 
 package react {
 
-import react.Slot;
-
-public class Counter extends Slot
+public class Counter
 {
     public var notifies :int;
 
-    override public function onEmit (event :Object) :void {
+    public function onEmit (event :Object) :void {
         notifies++;
     }
 }

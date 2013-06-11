@@ -25,12 +25,11 @@ public interface ValueView
     function map (func :Function) :ValueView;
 
     /**
-     * Connects the supplied listener to this value, such that it will be notified when this value
-     * changes. The listener is held by a strong reference, so it's held in memory by virtue of
-     * being connected.
+     * Connects the supplied Function to this value, such that it will be notified when this value
+     * changes.
      * @return a connection instance which can be used to cancel the connection.
      */
-    function connect (listener :ValueListener) :Connection;
+    function connect (listener :Function) :Connection;
 
     /**
      * Connects the supplied listener to this value, such that it will be notified when this value
@@ -40,13 +39,13 @@ public interface ValueView
      * worry about cleaning up after itself.
      * @return a connection instance which can be used to cancel the connection.
      */
-    function connectNotify (listener :ValueListener) :Connection;
+    function connectNotify (listener :Function) :Connection;
 
     /**
      * Disconnects the supplied listener from this value if it's connected. If the listener has been
      * connected multiple times, all connections are cancelled.
      */
-    function disconnect (listener :ValueListener) :void;
+    function disconnect (listener :Function) :void;
 }
 
 }

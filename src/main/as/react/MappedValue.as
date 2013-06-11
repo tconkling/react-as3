@@ -48,7 +48,6 @@ public /*abstract*/ class MappedValue extends AbstractValue
 
 import react.Connection;
 import react.MappedValue;
-import react.ValueListener;
 import react.ValueView;
 
 class MappedValueImpl extends MappedValue {
@@ -62,7 +61,7 @@ class MappedValueImpl extends MappedValue {
     }
 
     override protected function connectToSource () :Connection {
-        return _source.connect(ValueListener.create(onSourceChange));
+        return _source.connect(onSourceChange);
     }
 
     protected function onSourceChange (value :Object, ovalue :Object) :void {
