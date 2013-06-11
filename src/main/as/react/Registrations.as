@@ -21,7 +21,7 @@ class FunctionRegistration
         _f = f;
     }
 
-    public function cancel () :void {
+    public function close () :void {
         if (_f != null) {
             var f :Function = _f;
             _f = null;

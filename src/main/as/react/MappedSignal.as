@@ -37,7 +37,7 @@ public /*abstract*/ class MappedSignal extends AbstractSignal
     override protected function connectionRemoved () :void {
         super.connectionRemoved();
         if (!this.hasConnections && _conn != null) {
-            _conn.cancel();
+            _conn.close();
             _conn = null;
         }
     }

@@ -31,14 +31,14 @@ public /*abstract*/ class AbstractValue extends Reactor
         // will expect to be notified of that change; however if onEmit throws a runtime exception,
         // we need to take care of disconnecting the listener because the returned connection
         // instance will never reach the caller
-        var conn :Connection = connect(listener);
+        var cons :Cons = addConnection(listener);
         try {
-            Cons(conn).listener.onChange(get(), null);
+            cons.listener.onChange(get(), null);
         } catch (e :Error) {
-            conn.cancel();
+            cons.close();
             throw e;
         }
-        return conn;
+        return cons;
     }
 
     public function disconnect (listener :Function) :void {
@@ -96,7 +96,7 @@ public /*abstract*/ class AbstractValue extends Reactor
                 }
 
                 if (cons.oneShot()) {
-                    cons.cancel();
+                    cons.close();
                 }
             }
         } finally {

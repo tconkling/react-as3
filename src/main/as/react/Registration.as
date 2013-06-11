@@ -5,9 +5,7 @@ package react {
 
 public interface Registration
 {
-    /**
-     * Disconnects this registration.
-     */
-    function cancel () :void;
+    /** Closes this resource stream, freeing all resources associated with it. */
+    function close () :void;
 }
 }

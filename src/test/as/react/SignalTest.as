@@ -81,7 +81,7 @@ public class SignalTest
 
         // now add our removing signal, and dispatch again
         signal.connect(function () :void {
-            rconn.cancel();
+            rconn.close();
         }).atPriority(1); // ensure that we're before toRemove
         signal.emit(42);
 
@@ -105,7 +105,7 @@ public class SignalTest
 
         // now add our adder/remover signal, and dispatch again
         signal.connect(function () :void {
-            rconn.cancel();
+            rconn.close();
             signal.connect(toAdd.onEmit);
         });
         signal.emit(42);
@@ -166,8 +166,8 @@ public class SignalTest
         assertEquals(2, counter.notifies);
 
         // disconnect from the mapped signal and ensure that it clears its connection
-        c1.cancel();
-        c2.cancel();
+        c1.close();
+        c2.close();
         assert(!signal.hasConnections);
     }
 }
