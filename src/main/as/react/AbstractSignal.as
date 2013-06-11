@@ -42,7 +42,7 @@ public class AbstractSignal extends Reactor
                     error.addFailure(e);
                 }
                 if (cons.oneShot()) {
-                    cons.disconnect();
+                    cons.cancel();
                 }
             }
         } finally {

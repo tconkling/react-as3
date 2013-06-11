@@ -26,7 +26,7 @@ internal class Cons implements Connection
         return _listener;
     }
 
-    public function disconnect () :void {
+    public function cancel () :void {
         // multiple disconnects are OK, we just NOOP after the first one
         if (_owner != null) {
             _owner.removeCons(this);

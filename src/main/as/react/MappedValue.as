@@ -37,7 +37,7 @@ public /*abstract*/ class MappedValue extends AbstractValue
     override protected function connectionRemoved () :void {
         super.connectionRemoved();
         if (!this.hasConnections && _conn != null) {
-            _conn.disconnect();
+            _conn.cancel();
             _conn = null;
         }
     }

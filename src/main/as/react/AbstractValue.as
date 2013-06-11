@@ -35,7 +35,7 @@ public /*abstract*/ class AbstractValue extends Reactor
         try {
             Cons(conn).listener.onChange(get(), null);
         } catch (e :Error) {
-            conn.disconnect();
+            conn.cancel();
             throw e;
         }
         return conn;
@@ -96,7 +96,7 @@ public /*abstract*/ class AbstractValue extends Reactor
                 }
 
                 if (cons.oneShot()) {
-                    cons.disconnect();
+                    cons.cancel();
                 }
             }
         } finally {

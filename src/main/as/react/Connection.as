@@ -3,14 +3,8 @@
 
 package react {
 
-public interface Connection
+public interface Connection extends Registration
 {
-    /**
-     * Disconnects this registration. Subsequent events will not be dispatched to the associated
-     * slot or listener.
-     */
-    function disconnect () :void;
-
     /**
      * Converts this connection into a one-shot connection. After the first time the slot or
      * listener is notified, it will automatically be disconnected.
