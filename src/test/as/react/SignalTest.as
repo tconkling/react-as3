@@ -15,7 +15,7 @@ public class SignalTest
     }
 
     public function testSignalToSlot () :void {
-        var signal :Signal = new Signal();
+        var signal :Signal = new Signal(int);
         var slot :AccSlot = new AccSlot();
         signal.connect(slot.onEmit);
         signal.emit(1);
@@ -25,7 +25,7 @@ public class SignalTest
     }
 
     public function testOneShotSlot () :void {
-        var signal :Signal = new Signal();
+        var signal :Signal = new Signal(int);
         var slot :AccSlot = new AccSlot();
         signal.connect(slot.onEmit).once();
         signal.emit(1); // slot should be removed after this emit
@@ -54,7 +54,7 @@ public class SignalTest
     }
 
     public function testAddDuringDispatch () :void {
-        var signal :Signal = new Signal();
+        var signal :Signal = new Signal(int);
         var toAdd :AccSlot = new AccSlot();
 
         signal.connect(function () :void {
@@ -71,7 +71,7 @@ public class SignalTest
     }
 
     public function testRemoveDuringDispatch () :void {
-        var signal :Signal = new Signal();
+        var signal :Signal = new Signal(int);
         var toRemove :AccSlot = new AccSlot();
         var rconn :Connection = signal.connect(toRemove.onEmit);
 
@@ -94,7 +94,7 @@ public class SignalTest
     }
 
     public function testAddAndRemoveDuringDispatch () :void {
-        var signal :Signal = new Signal();
+        var signal :Signal = new Signal(int);
         var toAdd :AccSlot = new AccSlot();
         var toRemove :AccSlot = new AccSlot();
         var rconn :Connection = signal.connect(toRemove.onEmit);
@@ -120,7 +120,7 @@ public class SignalTest
     }
 
     public function testUnitSlot () :void {
-        var signal :Signal = new Signal();
+        var signal :Signal = new Signal(int);
         var fired :Boolean = false;
         signal.connect(function () :void {
             fired = true;
@@ -153,7 +153,7 @@ public class SignalTest
     }
 
     public function testMappedSignal () :void {
-        var signal :Signal = new Signal();
+        var signal :Signal = new Signal(int);
         var mapped :SignalView = signal.map(toString);
 
         var counter :Counter = new Counter();

@@ -11,9 +11,10 @@ public class Signal extends AbstractSignal
 {
     /**
      * Constructs a new Signal.
-     * The optional eventType parameter exists purely for documentation purposes.
+     * The eventType parameter exists purely for documentation purposes.
      */
-    public function Signal (eventType :Class = null) {
+    public function Signal (eventType :Class) {
+        // no-op
     }
 
     /**
