@@ -14,7 +14,7 @@ Building
 
 The library is built using [Ant] and [Maven], or with [Flash Builder].
 
-From the command line, invoke `ant` to build the library, or 'ant maven-deploy'
+From the command line, invoke `ant` to build the library, or `ant maven-deploy`
 to build and deploy it to your local Maven repository.
 
 There's also a Flash Builder project at the root level of the repository.
