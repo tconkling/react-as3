@@ -16,34 +16,21 @@ public /*abstract*/ class Reactor
         return _listeners != null;
     }
 
-    public function addConnection (listener :Function) :Cons {
+    protected function addConnection (listener :Function) :Cons {
         if (listener == null) {
             throw new ArgumentError("Null listener");
         }
         return addCons(new Cons(this, RListener.create(listener)));
     }
 
-    public function addCons (cons :Cons) :Cons {
+    protected function removeConnection (listener :Function) :void {
         if (this.isDispatching) {
             _pendingRuns = insert(_pendingRuns, new Runs(function () :void {
-                _listeners = Cons.insert(_listeners, cons);
-                connectionAdded();
-            }));
-        } else {
-            _listeners = Cons.insert(_listeners, cons);
-            connectionAdded();
-        }
-        return cons;
-    }
-
-    public function removeCons (cons :Cons) :void {
-        if (this.isDispatching) {
-            _pendingRuns = insert(_pendingRuns, new Runs(function () :void {
-                _listeners = Cons.remove(_listeners, cons);
+                _listeners = Cons.removeAll(_listeners, listener);
                 connectionRemoved();
             }));
         } else {
-            _listeners = Cons.remove(_listeners, cons);
+            _listeners = Cons.removeAll(_listeners, listener);
             connectionRemoved();
         }
     }
@@ -64,18 +51,6 @@ public /*abstract*/ class Reactor
         // now remove listeners any queued for removing and add any queued for adding
         for (; _pendingRuns != null; _pendingRuns = _pendingRuns.next) {
             _pendingRuns.action();
-        }
-    }
-
-    protected function removeConnection (listener :Function) :void {
-        if (this.isDispatching) {
-            _pendingRuns = insert(_pendingRuns, new Runs(function () :void {
-                _listeners = Cons.removeAll(_listeners, listener);
-                connectionRemoved();
-            }));
-        } else {
-            _listeners = Cons.removeAll(_listeners, listener);
-            connectionRemoved();
         }
     }
 
@@ -100,6 +75,35 @@ public /*abstract*/ class Reactor
         // noop
     }
 
+    internal function addCons (cons :Cons) :Cons {
+        if (this.isDispatching) {
+            _pendingRuns = insert(_pendingRuns, new Runs(function () :void {
+                _listeners = Cons.insert(_listeners, cons);
+                connectionAdded();
+            }));
+        } else {
+            _listeners = Cons.insert(_listeners, cons);
+            connectionAdded();
+        }
+        return cons;
+    }
+
+    internal function removeCons (cons :Cons) :void {
+        if (this.isDispatching) {
+            _pendingRuns = insert(_pendingRuns, new Runs(function () :void {
+                _listeners = Cons.remove(_listeners, cons);
+                connectionRemoved();
+            }));
+        } else {
+            _listeners = Cons.remove(_listeners, cons);
+            connectionRemoved();
+        }
+    }
+
+    private function get isDispatching () :Boolean {
+        return _listeners == DISPATCHING;
+    }
+
     protected static function insert (head :Runs, action :Runs) :Runs {
         if (head == null) {
             return action;
@@ -107,11 +111,6 @@ public /*abstract*/ class Reactor
             head.next = insert(head.next, action);
             return head;
         }
-    }
-
-    // always called while lock is held on this reactor
-    private function get isDispatching () :Boolean {
-        return _listeners == DISPATCHING;
     }
 
     protected var _listeners :Cons;
