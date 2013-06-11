@@ -8,7 +8,7 @@ public class ObjectValue extends AbstractValue
     /**
      * Creates an instance with the supplied starting value.
      */
-    public function ObjectValue (value :*) {
+    public function ObjectValue (value :Object) {
         _value = value;
     }
 
@@ -21,7 +21,7 @@ public class ObjectValue extends AbstractValue
      * value differs from the current value, as determined via {@link Object#equals}.
      * @return the previous value contained by this instance.
      */
-    public function update (value :*) :* {
+    public function update (value :Object) :* {
         return updateAndNotifyIf(value);
     }
 
@@ -30,7 +30,7 @@ public class ObjectValue extends AbstractValue
      * of whether the new value is equal to the old value.
      * @return the previous value contained by this instance.
      */
-    public function updateForce (value :*) :* {
+    public function updateForce (value :Object) :* {
         return updateAndNotify(value);
     }
 
@@ -44,6 +44,6 @@ public class ObjectValue extends AbstractValue
         return oldValue;
     }
 
-    protected var _value :*;
+    protected var _value :Object;
 }
 }
