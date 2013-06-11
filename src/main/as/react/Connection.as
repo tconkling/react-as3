@@ -3,6 +3,10 @@
 
 package react {
 
+/**
+ * Provides a mechanism to cancel a slot or listener registration, or to perform post-registration
+ * adjustment like making the registration single-shot.
+ */
 public interface Connection extends Registration
 {
     /**

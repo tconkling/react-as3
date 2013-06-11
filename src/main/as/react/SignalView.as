@@ -26,8 +26,8 @@ public interface SignalView
     function connect (slot :Function) :Connection;
 
     /**
-     * Disconnects the supplied function from this signal if connect was called with it. If the slot has
-     * been connected multiple times, all connections are cancelled.
+     * Disconnects the supplied function from this signal if connect was called with it.
+     * If the slot has been connected multiple times, all connections are cancelled.
      */
     function disconnect (slot :Function) :void;
 }
