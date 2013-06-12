@@ -3,8 +3,6 @@
 
 package react {
 
-import flash.errors.IllegalOperationError;
-
 /**
  * Handles the machinery of connecting slots to a signal and emitting events to them, without
  * exposing a public interface for emitting events. This can be used by entities which wish to
