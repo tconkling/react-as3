@@ -8,7 +8,7 @@ public class ObjectValue extends AbstractValue
     /**
      * Creates an instance with the supplied starting value.
      */
-    public function ObjectValue (value :Object) {
+    public function ObjectValue (value :Object = null) {
         _value = value;
     }
 

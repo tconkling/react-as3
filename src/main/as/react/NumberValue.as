@@ -8,7 +8,7 @@ public class NumberValue extends AbstractValue
     /**
      * Creates an instance with the supplied starting value.
      */
-    public function NumberValue (value :Number) {
+    public function NumberValue (value :Number = 0) {
         _value = value;
     }
 

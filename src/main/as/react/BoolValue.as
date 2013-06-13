@@ -8,7 +8,7 @@ public class BoolValue extends AbstractValue
     /**
      * Creates an instance with the supplied starting value.
      */
-    public function BoolValue (value :Boolean) {
+    public function BoolValue (value :Boolean = false) {
         _value = value;
     }
 
