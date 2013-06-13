@@ -4,6 +4,7 @@
 package react {
 
 public class ObjectValue extends AbstractValue
+    implements ObjectView
 {
     /**
      * Creates an instance with the supplied starting value.

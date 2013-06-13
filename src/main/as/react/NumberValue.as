@@ -4,6 +4,7 @@
 package react {
 
 public class NumberValue extends AbstractValue
+    implements NumberView
 {
     /**
      * Creates an instance with the supplied starting value.

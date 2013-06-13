@@ -4,6 +4,7 @@
 package react {
 
 public class BoolValue extends AbstractValue
+    implements BoolView
 {
     /**
      * Creates an instance with the supplied starting value.
