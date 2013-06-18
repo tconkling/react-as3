@@ -22,8 +22,8 @@ public class ObjectValue extends AbstractValue
      * value differs from the current value, as determined via {@link Object#equals}.
      * @return the previous value contained by this instance.
      */
-    public function update (value :Object) :* {
-        return updateAndNotifyIf(value);
+    public function set value (value :Object) :void {
+        updateAndNotifyIf(value);
     }
 
     /**

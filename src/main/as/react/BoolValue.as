@@ -22,8 +22,8 @@ public class BoolValue extends AbstractValue
      * value differs from the current value, as determined via {@link Object#equals}.
      * @return the previous value contained by this instance.
      */
-    public function update (value :Boolean) :Boolean {
-        return updateAndNotifyIf(value) as Boolean;
+    public function set value (value :Boolean) :void {
+        updateAndNotifyIf(value);
     }
 
     /**

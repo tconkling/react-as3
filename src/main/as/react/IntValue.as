@@ -22,8 +22,8 @@ public class IntValue extends AbstractValue
      * value differs from the current value, as determined via {@link Object#equals}.
      * @return the previous value contained by this instance.
      */
-    public function update (value :int) :int {
-        return updateAndNotifyIf(value) as int;
+    public function set value (value :int) :void {
+        updateAndNotifyIf(value);
     }
 
     /**

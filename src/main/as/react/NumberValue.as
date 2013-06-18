@@ -22,8 +22,8 @@ public class NumberValue extends AbstractValue
      * value differs from the current value, as determined via {@link Object#equals}.
      * @return the previous value contained by this instance.
      */
-    public function update (value :Number) :Number {
-        return updateAndNotifyIf(value) as Number;
+    public function set value (value :Number) :void {
+        updateAndNotifyIf(value);
     }
 
     /**
