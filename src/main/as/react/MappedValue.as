@@ -13,8 +13,24 @@ import flash.errors.IllegalOperationError;
  */
 public /*abstract*/ class MappedValue extends AbstractValue
 {
-    public static function create (source :ValueView, f :Function) :MappedValue {
-        return new MappedValueImpl(source, f);
+    public static function create (source :ValueView, map :Function) :MappedValue {
+        return new MappedValueImpl(source, map);
+    }
+
+    public static function boolView (source :ValueView, map :Function) :BoolView {
+        return new MappedBool(source, map);
+    }
+
+    public static function intView (source :ValueView, map :Function) :IntView {
+        return new MappedInt(source, map);
+    }
+
+    public static function uintView (source :ValueView, map :Function) :UintView {
+        return new MappedUint(source, map);
+    }
+
+    public static function numberView (source :ValueView, map :Function) :NumberView {
+        return new MappedNumber(source, map);
     }
 
     /**
@@ -42,12 +58,16 @@ public /*abstract*/ class MappedValue extends AbstractValue
         }
     }
 
-    protected var _conn :Connection
+    protected var _conn :Connection;
 }
 }
 
+import react.BoolView;
 import react.Connection;
+import react.IntView;
 import react.MappedValue;
+import react.NumberView;
+import react.UintView;
 import react.ValueView;
 
 class MappedValueImpl extends MappedValue {
@@ -70,4 +90,44 @@ class MappedValueImpl extends MappedValue {
 
     protected var _source :ValueView;
     protected var _f :Function;
+}
+
+class MappedBool extends MappedValueImpl implements BoolView {
+    public function MappedBool (source :ValueView, f :Function) {
+        super(source, f);
+    }
+
+    public function get value () :Boolean {
+        return _f(_source.get());
+    }
+}
+
+class MappedInt extends MappedValueImpl implements IntView {
+    public function MappedInt (source :ValueView, f :Function) {
+        super(source, f);
+    }
+
+    public function get value () :int {
+        return _f(_source.get());
+    }
+}
+
+class MappedUint extends MappedValueImpl implements UintView {
+    public function MappedUint (source :ValueView, f :Function) {
+        super(source, f);
+    }
+
+    public function get value () :uint {
+        return _f(_source.get());
+    }
+}
+
+class MappedNumber extends MappedValueImpl implements NumberView {
+    public function MappedNumber (source :ValueView, f :Function) {
+        super(source, f);
+    }
+
+    public function get value () :Number {
+        return _f(_source.get());
+    }
 }

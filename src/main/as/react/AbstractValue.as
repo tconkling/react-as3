@@ -22,6 +22,22 @@ public /*abstract*/ class AbstractValue extends Reactor
         return MappedValue.create(this, func);
     }
 
+    public function mapToBool (func :Function) :BoolView {
+        return MappedValue.boolView(this, func);
+    }
+
+    public function mapToInt (func :Function) :IntView {
+        return MappedValue.intView(this, func);
+    }
+
+    public function mapToUint (func :Function) :UintView {
+        return MappedValue.uintView(this, func);
+    }
+
+    public function mapToNumber (func :Function) :NumberView {
+        return MappedValue.numberView(this, func);
+    }
+
     public function connect (listener :Function) :Connection {
         return addConnection(listener);
     }

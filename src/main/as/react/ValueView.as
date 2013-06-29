@@ -25,6 +25,26 @@ public interface ValueView
     function map (func :Function) :ValueView;
 
     /**
+     * Creates a BoolView that maps this value via a function.
+     */
+    function mapToBool (func :Function) :BoolView;
+
+    /**
+     * Creates an IntView that maps this value via a function.
+     */
+    function mapToInt (func :Function) :IntView;
+
+    /**
+     * Creates a UintView that maps this value via a function.
+     */
+    function mapToUint (func :Function) :UintView;
+
+    /**
+     * Creates a NumberView that maps this value via a function.
+     */
+    function mapToNumber (func :Function) :NumberView;
+
+    /**
      * Connects the supplied Function to this value, such that it will be notified when this value
      * changes.
      * @return a connection instance which can be used to cancel the connection.
