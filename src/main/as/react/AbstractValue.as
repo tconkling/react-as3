@@ -18,6 +18,11 @@ public /*abstract*/ class AbstractValue extends Reactor
         throw new IllegalOperationError("abstract");
     }
 
+   /** Returns a "slot" Function which simply calls through to the Value's setter function. */
+    public function get slot () :Function {
+        return this.updateAndNotifyIf;
+    }
+
     public function map (func :Function) :ValueView {
         return MappedValue.create(this, func);
     }
