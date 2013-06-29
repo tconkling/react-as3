@@ -40,7 +40,7 @@ public class ReactTest extends Sprite
     }
 
     protected function futureTest () :void {
-        var suite :RFutureTest = new RFutureTest();
+        var suite :FutureTest = new FutureTest();
         suite.testImmediate();
         suite.testDeferred();
         suite.testMappedImmediate();

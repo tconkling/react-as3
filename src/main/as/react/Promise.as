@@ -4,7 +4,7 @@
 package react {
 
 /**
- * Provides a concrete implementation {@link RFuture} that can be updated with a success or failure
+ * Provides a concrete implementation {@link Future} that can be updated with a success or failure
  * result when it becomes available.
  *
  * <p>This implementation also guarantees a useful behavior, which is that all listeners added
@@ -13,11 +13,11 @@ package react {
  * completed as a useful "box" for its underlying value, without concern that references to long
  * satisfied listeners will be inadvertently retained.</p>
  */
-public class RPromise extends RFuture {
+public class Promise extends Future {
 
     /** Creates a new, uncompleted, promise. */
-    public static function create () :RPromise {
-        return new RPromise();
+    public static function create () :Promise {
+        return new Promise();
     }
 
     /** Causes this promise to be completed successfully with {@code value}. */
@@ -41,7 +41,7 @@ public class RPromise extends RFuture {
         return _value.hasConnections;
     }
 
-    public function RPromise () {
+    public function Promise () {
         super(_value = new TryValue());
     }
 

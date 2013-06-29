@@ -3,16 +3,16 @@
 
 package react {
 
-public class RFutureTest {
-
+public class FutureTest
+{
     public function testImmediate () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success :RFuture = RFuture.success("Yay!");
+        const success :Future = Future.success("Yay!");
         counter.bind(success);
         counter.check("immediate succeed", 1, 0, 1);
 
-        const failure :RFuture = RFuture.failure(new Error("Boo!"));
+        const failure :Future = Future.failure(new Error("Boo!"));
         counter.bind(failure);
         counter.check("immediate failure", 0, 1, 1);
     }
@@ -20,13 +20,13 @@ public class RFutureTest {
     public function testDeferred () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success :RPromise = RPromise.create();
+        const success :Promise = Promise.create();
         counter.bind(success);
         counter.check("before succeed", 0, 0, 0);
         success.succeed("Yay!");
         counter.check("after succeed", 1, 0, 1);
 
-        const failure :RPromise = RPromise.create();
+        const failure :Promise = Promise.create();
         counter.bind(failure);
         counter.check("before fail", 0, 0, 0);
         failure.fail(new Error("Boo!"));
@@ -39,11 +39,11 @@ public class RFutureTest {
     public function testMappedImmediate () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success :RFuture = RFuture.success("Yay!");
+        const success :Future = Future.success("Yay!");
         counter.bind(success.map(Functions.NON_NULL));
         counter.check("immediate succeed", 1, 0, 1);
 
-        const failure :RFuture = RFuture.failure(new Error("Boo!"));
+        const failure :Future = Future.failure(new Error("Boo!"));
         counter.bind(failure.map(Functions.NON_NULL));
         counter.check("immediate failure", 0, 1, 1);
     }
@@ -51,13 +51,13 @@ public class RFutureTest {
     public function testMappedDeferred () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success :RPromise = RPromise.create();
+        const success :Promise = Promise.create();
         counter.bind(success.map(Functions.NON_NULL));
         counter.check("before succeed", 0, 0, 0);
         success.succeed("Yay!");
         counter.check("after succeed", 1, 0, 1);
 
-        const failure :RPromise = RPromise.create();
+        const failure :Promise = Promise.create();
         counter.bind(failure.map(Functions.NON_NULL));
         counter.check("before fail", 0, 0, 0);
         failure.fail(new Error("Boo!"));
@@ -71,13 +71,13 @@ public class RFutureTest {
         const scounter :FutureCounter = new FutureCounter();
         const fcounter :FutureCounter = new FutureCounter();
 
-        const success :RFuture = RFuture.success("Yay!");
+        const success :Future = Future.success("Yay!");
         scounter.bind(success.flatMap(SUCCESS_MAP));
         fcounter.bind(success.flatMap(FAIL_MAP));
         scounter.check("immediate success/success", 1, 0, 1);
         fcounter.check("immediate success/failure", 0, 1, 1);
 
-        const failure :RFuture = RFuture.failure(new Error("Boo!"));
+        const failure :Future = Future.failure(new Error("Boo!"));
         scounter.bind(failure.flatMap(SUCCESS_MAP));
         fcounter.bind(failure.flatMap(FAIL_MAP));
         scounter.check("immediate failure/success", 0, 1, 1);
@@ -88,7 +88,7 @@ public class RFutureTest {
         const scounter :FutureCounter = new FutureCounter();
         const fcounter :FutureCounter = new FutureCounter();
 
-        const success :RPromise = RPromise.create();
+        const success :Promise = Promise.create();
         scounter.bind(success.flatMap(SUCCESS_MAP));
         scounter.check("before succeed/succeed", 0, 0, 0);
         fcounter.bind(success.flatMap(FAIL_MAP));
@@ -97,7 +97,7 @@ public class RFutureTest {
         scounter.check("after succeed/succeed", 1, 0, 1);
         fcounter.check("after succeed/fail", 0, 1, 1);
 
-        const failure :RPromise = RPromise.create();
+        const failure :Promise = Promise.create();
         scounter.bind(failure.flatMap(SUCCESS_MAP));
         fcounter.bind(failure.flatMap(FAIL_MAP));
         scounter.check("before fail/success", 0, 0, 0);
@@ -114,14 +114,14 @@ public class RFutureTest {
         const scounter :FutureCounter = new FutureCounter();
         const fcounter :FutureCounter = new FutureCounter();
 
-        {   const success :RPromise = RPromise.create();
-            const innerSuccessSuccess :RPromise = RPromise.create();
-            scounter.bind(success.flatMap(function (value :String) :RFuture {
+        {   const success :Promise = Promise.create();
+            const innerSuccessSuccess :Promise = Promise.create();
+            scounter.bind(success.flatMap(function (value :String) :Future {
                 return innerSuccessSuccess;
             }));
             scounter.check("before succeed/succeed", 0, 0, 0);
-            const innerSuccessFailure :RPromise = RPromise.create();
-            fcounter.bind(success.flatMap(function (value :String) :RFuture {
+            const innerSuccessFailure :Promise = Promise.create();
+            fcounter.bind(success.flatMap(function (value :String) :Future {
                 return innerSuccessFailure;
             }));
             fcounter.check("before succeed/fail", 0, 0, 0);
@@ -140,14 +140,14 @@ public class RFutureTest {
         }
 
         {
-            const failure :RPromise = RPromise.create();
-            const innerFailureSuccess :RPromise = RPromise.create();
-            scounter.bind(failure.flatMap(function (value :String) :RFuture {
+            const failure :Promise = Promise.create();
+            const innerFailureSuccess :Promise = Promise.create();
+            scounter.bind(failure.flatMap(function (value :String) :Future {
                 return innerFailureSuccess;
             }));
             scounter.check("before fail/succeed", 0, 0, 0);
-            const innerFailureFailure :RPromise = RPromise.create();
-            fcounter.bind(failure.flatMap(function (value :String) :RFuture {
+            const innerFailureFailure :Promise = Promise.create();
+            fcounter.bind(failure.flatMap(function (value :String) :Future {
                 return innerFailureFailure;
             }));
             fcounter.check("before fail/fail", 0, 0, 0);
@@ -169,13 +169,13 @@ public class RFutureTest {
     public function testSequenceImmediate () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success1 :RFuture = RFuture.success("Yay 1!");
-        const success2 :RFuture = RFuture.success("Yay 2!");
+        const success1 :Future = Future.success("Yay 1!");
+        const success2 :Future = Future.success("Yay 2!");
 
-        const failure1 :RFuture = RFuture.failure(new Error("Boo 1!"));
-        const failure2 :RFuture = RFuture.failure(new Error("Boo 2!"));
+        const failure1 :Future = Future.failure(new Error("Boo 1!"));
+        const failure2 :Future = Future.failure(new Error("Boo 2!"));
 
-        const sucseq :RFuture = RFuture.sequence([success1, success2]);
+        const sucseq :Future = Future.sequence([success1, success2]);
         counter.bind(sucseq);
         sucseq.onSuccess(function (results :Array) :void {
             assertEquals(results.length, 2);
@@ -184,23 +184,23 @@ public class RFutureTest {
         });
         counter.check("immediate seq success/success", 1, 0, 1);
 
-        counter.bind(RFuture.sequence([success1, failure1]));
+        counter.bind(Future.sequence([success1, failure1]));
         counter.check("immediate seq success/failure", 0, 1, 1);
 
-        counter.bind(RFuture.sequence([failure1, success2]));
+        counter.bind(Future.sequence([failure1, success2]));
         counter.check("immediate seq failure/success", 0, 1, 1);
 
-        counter.bind(RFuture.sequence([failure1, failure2]));
+        counter.bind(Future.sequence([failure1, failure2]));
         counter.check("immediate seq failure/failure", 0, 1, 1);
     }
 
     public function testSequenceDeferred () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success1 :RPromise = RPromise.create(), success2 :RPromise = RPromise.create();
-        const failure1 :RPromise = RPromise.create(), failure2 :RPromise = RPromise.create();
+        const success1 :Promise = Promise.create(), success2 :Promise = Promise.create();
+        const failure1 :Promise = Promise.create(), failure2 :Promise = Promise.create();
 
-        const suc2seq :RFuture = RFuture.sequence([success1, success2]);
+        const suc2seq :Future = Future.sequence([success1, success2]);
         counter.bind(suc2seq);
         suc2seq.onSuccess(function (results :Array) :void {
             assertEquals(results.length, 2);
@@ -212,7 +212,7 @@ public class RFutureTest {
         success2.succeed("Yay 2!");
         counter.check("after seq succeed/succeed", 1, 0, 1);
 
-        const sucfailseq :RFuture = RFuture.sequence([success1, failure1]);
+        const sucfailseq :Future = Future.sequence([success1, failure1]);
         sucfailseq.onFailure(function (cause :Error) :void {
             assertFalse(cause is MultiFailureError);
             assertEquals("Boo 1!", cause.message);
@@ -222,7 +222,7 @@ public class RFutureTest {
         failure1.fail(new Error("Boo 1!"));
         counter.check("after seq succeed/fail", 0, 1, 1);
 
-        const failsucseq :RFuture = RFuture.sequence([failure1, success2]);
+        const failsucseq :Future = Future.sequence([failure1, success2]);
         failsucseq.onFailure(function (cause :Error) :void {
             assertFalse(cause is MultiFailureError);
             assertEquals("Boo 1!", cause.message);
@@ -230,7 +230,7 @@ public class RFutureTest {
         counter.bind(failsucseq);
         counter.check("after seq fail/succeed", 0, 1, 1);
 
-        const fail2seq :RFuture = RFuture.sequence([failure1, failure2]);
+        const fail2seq :Future = Future.sequence([failure1, failure2]);
         fail2seq.onFailure(function (cause :Error) :void {
             assert(cause is MultiFailureError);
             assertEquals("2 failures: Error: Boo 1!, Error: Boo 2!", MultiFailureError(cause).getMessage());
@@ -241,25 +241,25 @@ public class RFutureTest {
         counter.check("after seq fail/fail", 0, 1, 1);
     }
 
-    protected static function SUCCESS_MAP (value :String) :RFuture {
-        return RFuture.success(value != null);
+    protected static function SUCCESS_MAP (value :String) :Future {
+        return Future.success(value != null);
     }
-    protected static function FAIL_MAP (value :String) :RFuture {
-        return RFuture.failure(new Error("Barzle!"));
+    protected static function FAIL_MAP (value :String) :Future {
+        return Future.failure(new Error("Barzle!"));
     }
 }
 
 }
 
 import react.Counter;
-import react.RFuture;
+import react.Future;
 
 class FutureCounter {
     public const successes :Counter = new Counter();
     public const failures :Counter = new Counter();
     public const completes :Counter = new Counter();
 
-    public function bind (future :RFuture) :void {
+    public function bind (future :Future) :void {
         reset();
         future.onSuccess(successes.slot);
         future.onFailure(failures.slot);

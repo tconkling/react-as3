@@ -9,7 +9,7 @@ import flash.errors.IllegalOperationError;
  * Represents a computation that either provided a result, or failed with an exception. Monadic
  * methods are provided that allow one to map and compose tries in ways that propagate failure.
  * This class is not itself "reactive", but it facilitates a more straightforward interface and
- * implementation for {@link RFuture} and {@link RPromise}.
+ * implementation for {@link Future} and {@link Promise}.
  */
 public /*abstract*/ class Try
 {
