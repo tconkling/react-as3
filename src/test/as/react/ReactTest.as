@@ -10,6 +10,7 @@ public class ReactTest extends Sprite
     public function ReactTest() {
         signalTest();
         valueTest();
+        futureTest();
     }
 
     protected function signalTest () :void {
@@ -36,6 +37,19 @@ public class ReactTest extends Sprite
         suite.testListenNotify();
         suite.testDisconnect();
         suite.testSlot();
+    }
+
+    protected function futureTest () :void {
+        var suite :RFutureTest = new RFutureTest();
+        suite.testImmediate();
+        suite.testDeferred();
+        suite.testMappedImmediate();
+        suite.testMappedDeferred();
+        suite.testFlatMappedImmediate();
+        suite.testFlatMappedDeferred();
+        suite.testFlatMappedDoubleDeferred();
+        suite.testSequenceImmediate();
+        suite.testSequenceDeferred();
     }
 }
 }

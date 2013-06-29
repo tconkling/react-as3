@@ -46,7 +46,7 @@ public class MultiFailureError extends Error
             }
             buf += getClassName(failure) + ": " + failure.message;
         }
-        return "" + _failures.length + (_failures.length != 1 ? " failures:" : "failure:") + buf;
+        return "" + _failures.length + (_failures.length != 1 ? " failures: " : "failure: ") + buf;
     }
 
     protected var _failures :Vector.<Error> = new Vector.<Error>();

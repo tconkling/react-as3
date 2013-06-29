@@ -161,9 +161,9 @@ public class SignalTest
         var c2 :Connection = mapped.connect(SignalTest.require("15"));
 
         signal.emit(15);
-        assertEquals(1, counter.notifies);
+        counter.assertTriggered(1);
         signal.emit(15);
-        assertEquals(2, counter.notifies);
+        counter.assertTriggered(2);
 
         // disconnect from the mapped signal and ensure that it clears its connection
         c1.close();

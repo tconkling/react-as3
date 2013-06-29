@@ -39,7 +39,7 @@ public class ValueTest
         value.connect(counter.onEmit).once();
         value.value = 15;
         value.value = 42;
-        assertEquals(1, counter.notifies);
+        counter.assertTriggered(1);
     }
 
     public function testMappedValue () :void {
@@ -51,11 +51,11 @@ public class ValueTest
         var c2 :Connection = mapped.connect(SignalTest.require("15"));
 
         value.value = 15;
-        assertEquals(1, counter.notifies);
+        counter.assertTriggered(1);
         value.value = 15;
-        assertEquals(1, counter.notifies);
+        counter.assertTriggered(1);
         value.updateForce(15);
-        assertEquals(2, counter.notifies);
+        counter.assertTriggered(2);
 
         // disconnect from the mapped value and ensure that it disconnects in turn
         c1.close();
