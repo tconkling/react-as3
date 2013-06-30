@@ -31,7 +31,7 @@ public class Promise extends Future {
     }
 
     /** Returns a function that can be used to complete this promise. */
-    public function completer () :Function {
+    public function get completer () :Function {
         return _value.slot;
 
     }
