@@ -45,6 +45,11 @@ public interface ValueView
     function mapToNumber (func :Function) :NumberView;
 
     /**
+     * Creates a TryView that maps this value via a function.
+     */
+    function mapToTry (func :Function) :TryView;
+
+    /**
      * Connects the supplied Function to this value, such that it will be notified when this value
      * changes.
      * @return a connection instance which can be used to cancel the connection.

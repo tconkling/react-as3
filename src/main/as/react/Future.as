@@ -28,7 +28,7 @@ public class Future {
 
     /** Returns a future with an already-computed result. */
     public static function result (result :Try) :Future {
-        return new Future(new ObjectValue(result));
+        return new Future(new TryValue(result));
     }
 
     /** Returns a future containing an Array of all success results from {@code futures} if all of
@@ -132,7 +132,7 @@ public class Future {
     public function map (func :Function) :Future {
         // we'd use Try.lift here but we have to handle the special case where our try is null,
         // meaning we haven't completed yet; it would be weird if Try.lift did that
-        return new Future(_result.map(function (result :Try) :Try {
+        return new Future(_result.mapToTry(function (result :Try) :Try {
             return (result == null ? null : result.map(func));
         }));
     };
@@ -141,7 +141,7 @@ public class Future {
      * the original result or the mapped result are both dispatched to the mapped result. This is
      * useful for chaining asynchronous actions. It's also known as monadic bind. */
     public function flatMap (func :Function) :Future {
-        const mapped :ObjectValue = new ObjectValue(null);
+        const mapped :TryValue = new TryValue();
         _result.connectNotify(function (result :Try) :void {
             if (result == null) {
                 return; // source future not yet complete; nothing to do
@@ -154,7 +154,7 @@ public class Future {
         return new Future(mapped);
     };
 
-    public function Future (result :ValueView) {
+    public function Future (result :TryView) {
         _result = result;
     }
 
@@ -164,7 +164,7 @@ public class Future {
         }
     }
 
-    protected var _result :ValueView; // ValueView<Try>
+    protected var _result :TryView;
     protected var _isComplete :BoolView;
 }
 

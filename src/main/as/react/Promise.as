@@ -42,21 +42,17 @@ public class Promise extends Future {
     }
 
     public function Promise () {
-        super(_value = new TryValue());
+        super(_value = new PromiseValue());
     }
 
-    protected var _value :TryValue;
+    protected var _value :PromiseValue;
 }
 
 }
 
-import react.ObjectValue;
+import react.TryValue;
 
-class TryValue extends ObjectValue {
-    public function TryValue () {
-        super(null);
-    }
-
+class PromiseValue extends TryValue {
     override protected function updateAndNotify (value :Object, force :Boolean = true) :Object {
         if (_value != null) {
             throw new Error("Already completed");
@@ -64,8 +60,8 @@ class TryValue extends ObjectValue {
         try {
             return super.updateAndNotify(value, force);
         } finally {
-            _listeners = null;
+            _listeners = null; // clear out our listeners now that they have been notified
         }
-        return null; // we'll never get here, but the stupid compiler doesn't know that
+        return null; // compiler too dumb to realize we'll never get here
     }
 }

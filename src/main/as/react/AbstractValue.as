@@ -43,6 +43,10 @@ public /*abstract*/ class AbstractValue extends Reactor
         return MappedValue.numberView(this, func);
     }
 
+    public function mapToTry (func :Function) :TryView {
+        return MappedValue.tryView(this, func);
+    }
+
     public function connect (listener :Function) :Connection {
         return addConnection(listener);
     }

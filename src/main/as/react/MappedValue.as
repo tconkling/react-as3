@@ -33,6 +33,10 @@ public /*abstract*/ class MappedValue extends AbstractValue
         return new MappedNumber(source, map);
     }
 
+    public static function tryView (source :ValueView, map :Function) :TryView {
+        return new MappedTry(source, map);
+    }
+
     /**
      * Establishes a connection to our source value. Called when we go from zero to one listeners.
      * When we go from one to zero listeners, the connection will automatically be cleared.
@@ -67,6 +71,8 @@ import react.Connection;
 import react.IntView;
 import react.MappedValue;
 import react.NumberView;
+import react.Try;
+import react.TryView;
 import react.UintView;
 import react.ValueView;
 
@@ -128,6 +134,16 @@ class MappedNumber extends MappedValueImpl implements NumberView {
     }
 
     public function get value () :Number {
+        return _f(_source.get());
+    }
+}
+
+class MappedTry extends MappedValueImpl implements TryView {
+    public function MappedTry (source :ValueView, f :Function) {
+        super(source, f);
+    }
+
+    public function get value () :Try {
         return _f(_source.get());
     }
 }
