@@ -21,7 +21,7 @@ public class Promise extends Future {
     }
 
     /** Causes this promise to be completed successfully with {@code value}. */
-    public function succeed (value :Object) :void {
+    public function succeed (value :Object = null) :void {
         _value.value = Try.success(value);
     }
 
