@@ -13,7 +13,7 @@ import flash.errors.IllegalOperationError;
  */
 public /*abstract*/ class MappedValue extends AbstractValue
 {
-    public static function create (source :ValueView, map :Function) :MappedValue {
+    public static function create (source :ValueView, map :Function) :ValueView {
         return new MappedValueImpl(source, map);
     }
 
