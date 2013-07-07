@@ -9,14 +9,26 @@ public class Registrations
     public static function createWithFunction (f :Function) :Registration {
         return new FunctionRegistration(f);
     }
+
+    /** Returns a Registration that does nothing. */
+    public static function Null () :Registration {
+        if (_null == null) {
+            _null = new NullRegistration();
+        }
+        return _null;
+    }
+
+    protected static var _null :NullRegistration;
 }
 }
 
 import react.Registration;
 
-class FunctionRegistration
-    implements react.Registration
-{
+class NullRegistration implements Registration {
+    public function close () :void {}
+}
+
+class FunctionRegistration implements Registration {
     public function FunctionRegistration (f :Function) {
         _f = f;
     }
