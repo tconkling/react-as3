@@ -72,11 +72,11 @@ public class Future {
         if (result == null) {
             _result.connect(function (result :Try) :void {
                 if (result.isSuccess) {
-                    slot(result.value);
+                    call(slot, result.value);
                 }
             });
         } else if (result.isSuccess) {
-            slot(result.value);
+            call(slot, result.value);
         }
         return this;
     }
@@ -89,11 +89,11 @@ public class Future {
         if (result == null) {
             _result.connect(function (result :Try) :void {
                 if (result.isFailure) {
-                    slot(result.failure);
+                    call(slot, result.failure);
                 }
             });
         } else if (result.isFailure) {
-            slot(result.failure);
+            call(slot, result.failure);
         }
         return this;
     };
@@ -106,7 +106,7 @@ public class Future {
         if (result == null) {
             _result.connect(slot);
         } else {
-            slot(result);
+            call(slot, result);
         }
         return this;
     };
@@ -161,6 +161,14 @@ public class Future {
     protected static function addToSequenceCallback (seq :Sequencer, idx :int) :Function {
         return function (result :Try) :void {
             seq.onResult(idx, result);
+        }
+    }
+
+    protected static function call (f :Function, arg :Object) :void {
+        if (f.length == 1) {
+            f(arg);
+        } else {
+            f();
         }
     }
 
