@@ -25,8 +25,11 @@ public class Promise extends Future {
         _value.value = Try.success(value);
     }
 
-    /** Causes this promise to be completed with failure caused by {@code cause}. */
-    public function fail (cause :Error) :void {
+    /**
+     * Causes this promise to be completed with failure caused by {@code cause}.
+     * 'cause' can be an Error, ErrorEvent, or String, and will be converted to an Error.
+     */
+    public function fail (cause :Object) :void {
         _value.value = Try.failure(cause);
     }
 

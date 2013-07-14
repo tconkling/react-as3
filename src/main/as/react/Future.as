@@ -21,8 +21,11 @@ public class Future {
         return result(Try.success(value));
     }
 
-    /** Returns a future with a pre-existing failure value. */
-    public static function failure (cause :Error) :Future {
+    /**
+     * Returns a future with a pre-existing failure value.
+     * 'cause' can be an Error, ErrorEvent, or String, and will be converted to an Error.
+     */
+    public static function failure (cause :Object) :Future {
         return result(Try.failure(cause));
     }
 
