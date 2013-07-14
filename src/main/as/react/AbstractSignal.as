@@ -27,29 +27,11 @@ public class AbstractSignal extends Reactor
      * Emits the supplied event to all connected slots.
      */
     protected function notifyEmit (event :Object) :void {
-        var lners :Cons = prepareNotify();
-        var error :MultiFailureError = null;
-        try {
-            for (var cons :Cons = lners; cons != null; cons = cons.next) {
-                try {
-                    cons.listener.onEmit(event);
-                } catch (e :Error) {
-                    if (error == null) {
-                        error = new MultiFailureError();
-                    }
-                    error.addFailure(e);
-                }
-                if (cons.oneShot()) {
-                    cons.close();
-                }
-            }
-        } finally {
-            finishNotify(lners);
-        }
+        notify(EMIT, event, null, null);
+    }
 
-        if (error != null) {
-            error.trigger();
-        }
+    protected static function EMIT (slot :RListener, event :Object, _1 :Object, _2 :Object) :void {
+        slot.onEmit(event);
     }
 }
 }

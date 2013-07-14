@@ -35,22 +35,42 @@ public /*abstract*/ class Reactor
         }
     }
 
-    protected function prepareNotify () :Cons {
+    /**
+     * Emits the supplied event to all connected slots. We omit a bunch of generic type shenanigans
+     * here and force the caller to just cast things, because this is all under the hood where
+     * there's zero chance of fucking up and this results in simpler, easier to read code.
+     */
+    protected function notify (notifier :Function, a1 :Object, a2 :Object, a3 :Object) :void {
         if (_listeners == DISPATCHING) {
             throw new Error("Initiated notify while notifying");
         }
         var lners :Cons = _listeners;
         _listeners = DISPATCHING;
-        return lners;
-    }
 
-    protected function finishNotify (lners :Cons) :void {
-        // note that we're no longer dispatching
-        _listeners = lners;
+        var error :Error = null;
+        try {
+            for (var cons :Cons = lners; cons != null; cons = cons.next) {
+                try {
+                    notifier(cons.listener, a1, a2, a3);
+                } catch (e :Error) {
+                    error = e;
+                }
+                if (cons.oneShot()) {
+                    cons.close();
+                }
+            }
 
-        // now remove listeners any queued for removing and add any queued for adding
-        for (; _pendingRuns != null; _pendingRuns = _pendingRuns.next) {
-            _pendingRuns.action();
+            if (error != null) {
+                throw error;
+            }
+        } finally {
+            // note that we're no longer dispatching
+            _listeners = lners;
+
+            // now remove listeners any queued for removing and add any queued for adding
+            for (; _pendingRuns != null; _pendingRuns = _pendingRuns.next) {
+                _pendingRuns.action();
+            }
         }
     }
 

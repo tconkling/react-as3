@@ -99,35 +99,15 @@ public /*abstract*/ class AbstractValue extends Reactor
     /**
      * Emits a change notification. Default implementation immediately notifies listeners.
      */
-    protected function emitChange (value :Object, ovalue :Object) :void {
-        notifyChange(value, ovalue);
+    protected function emitChange (value :Object, oldValue :Object) :void {
+        notifyChange(value, oldValue);
     }
 
     /**
      * Notifies our listeners of a value change.
      */
-    protected function notifyChange (value :Object, ovalue :Object) :void {
-        var lners :Cons = prepareNotify();
-        var error :MultiFailureError = null;
-        try {
-            for (var cons :Cons = lners; cons != null; cons = cons.next) {
-                try {
-                    cons.listener.onChange(value, ovalue);
-                } catch (e :Error) {
-                    if (error == null) {
-                        error = new MultiFailureError();
-                    }
-                    error.addFailure(e);
-                }
-
-                if (cons.oneShot()) {
-                    cons.close();
-                }
-            }
-        } finally {
-            finishNotify(lners);
-        }
-        if (error != null) error.trigger();
+    protected function notifyChange (value :Object, oldValue :Object) :void {
+        notify(CHANGE, value, oldValue, null);
     }
 
     /**
@@ -136,6 +116,10 @@ public /*abstract*/ class AbstractValue extends Reactor
      */
     protected function updateLocal (value :Object) :Object {
         throw new IllegalOperationError();
+    }
+
+    protected static function CHANGE (l :RListener, value :Object, oldValue :Object, _ :Object) :void {
+        l.onChange(value, oldValue);
     }
 }
 }

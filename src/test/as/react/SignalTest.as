@@ -149,7 +149,7 @@ public class SignalTest
                 throw new Error("Bang!");
             });
             signal.emit();
-        }, MultiFailureError);
+        }, Error);
     }
 
     public function testMappedSignal () :void {

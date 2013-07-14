@@ -214,8 +214,8 @@ public class FutureTest
 
         const sucfailseq :Future = Future.sequence([success1, failure1]);
         sucfailseq.onFailure(function (cause :Error) :void {
-            assertFalse(cause is MultiFailureError);
-            assertEquals("Boo 1!", cause.message);
+            assert(cause is MultiFailureError);
+            assertEquals("1 failure: Error: Boo 1!", cause.message);
         });
         counter.bind(sucfailseq);
         counter.check("before seq succeed/fail", 0, 0, 0);
@@ -224,8 +224,8 @@ public class FutureTest
 
         const failsucseq :Future = Future.sequence([failure1, success2]);
         failsucseq.onFailure(function (cause :Error) :void {
-            assertFalse(cause is MultiFailureError);
-            assertEquals("Boo 1!", cause.message);
+            assert(cause is MultiFailureError);
+            assertEquals("1 failure: Error: Boo 1!", cause.message);
         });
         counter.bind(failsucseq);
         counter.check("after seq fail/succeed", 0, 1, 1);

@@ -35,8 +35,8 @@ public class Future {
     }
 
     /** Returns a future containing an Array of all success results from {@code futures} if all of
-     * the futures complete successfully, or an aggregate of all failures (where multiple
-     * exceptions are combined via {@link MultiFailureException}), if any of the futures fails. */
+     * the futures complete successfully, or a MultiFailureException aggregating all failures, if
+     * any of the futures fail. */
     public static function sequence (futures :Array) :Future {
         const pseq :Promise = Promise.create();
         const seq :Sequencer = new Sequencer(pseq, futures.length);
@@ -205,7 +205,7 @@ class Sequencer {
 
         if (--_remain == 0) {
             if (_error != null) {
-                _pseq.fail(_error.consolidate());
+                _pseq.fail(_error);
             } else {
                 _pseq.succeed(_results);
             }
