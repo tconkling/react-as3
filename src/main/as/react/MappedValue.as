@@ -33,6 +33,10 @@ public /*abstract*/ class MappedValue extends AbstractValue
         return new MappedNumber(source, map);
     }
 
+    public static function objectView (source :ValueView, map :Function) :ObjectView {
+        return new MappedObject(source, map);
+    }
+
     public static function tryView (source :ValueView, map :Function) :TryView {
         return new MappedTry(source, map);
     }
@@ -71,6 +75,7 @@ import react.Connection;
 import react.IntView;
 import react.MappedValue;
 import react.NumberView;
+import react.ObjectView;
 import react.Try;
 import react.TryView;
 import react.UintView;
@@ -134,6 +139,16 @@ class MappedNumber extends MappedValueImpl implements NumberView {
     }
 
     public function get value () :Number {
+        return _f(_source.get());
+    }
+}
+
+class MappedObject extends MappedValueImpl implements ObjectView {
+    public function MappedObject (source :ValueView, f :Function) {
+        super(source, f);
+    }
+
+    public function get value () :* {
         return _f(_source.get());
     }
 }
