@@ -13,11 +13,11 @@ package react {
  * completed as a useful "box" for its underlying value, without concern that references to long
  * satisfied listeners will be inadvertently retained.</p>
  */
-public class Promise extends Future {
-
+public class Promise extends Future
+{
     /** Creates a new, uncompleted, promise. */
-    public static function create () :Promise {
-        return new Promise();
+    public function Promise () {
+        super(_value = new PromiseValue());
     }
 
     /** Causes this promise to be completed successfully with {@code value}. */
@@ -42,10 +42,6 @@ public class Promise extends Future {
     /** Returns true if there are listeners awaiting the completion of this promise. */
     public function get hasConnections () :Boolean {
         return _value.hasConnections;
-    }
-
-    public function Promise () {
-        super(_value = new PromiseValue());
     }
 
     protected var _value :PromiseValue;

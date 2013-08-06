@@ -20,13 +20,13 @@ public class FutureTest
     public function testDeferred () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success :Promise = Promise.create();
+        const success :Promise = new Promise();
         counter.bind(success);
         counter.check("before succeed", 0, 0, 0);
         success.succeed("Yay!");
         counter.check("after succeed", 1, 0, 1);
 
-        const failure :Promise = Promise.create();
+        const failure :Promise = new Promise();
         counter.bind(failure);
         counter.check("before fail", 0, 0, 0);
         failure.fail(new Error("Boo!"));
@@ -51,13 +51,13 @@ public class FutureTest
     public function testMappedDeferred () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success :Promise = Promise.create();
+        const success :Promise = new Promise();
         counter.bind(success.map(Functions.NON_NULL));
         counter.check("before succeed", 0, 0, 0);
         success.succeed("Yay!");
         counter.check("after succeed", 1, 0, 1);
 
-        const failure :Promise = Promise.create();
+        const failure :Promise = new Promise();
         counter.bind(failure.map(Functions.NON_NULL));
         counter.check("before fail", 0, 0, 0);
         failure.fail(new Error("Boo!"));
@@ -88,7 +88,7 @@ public class FutureTest
         const scounter :FutureCounter = new FutureCounter();
         const fcounter :FutureCounter = new FutureCounter();
 
-        const success :Promise = Promise.create();
+        const success :Promise = new Promise();
         scounter.bind(success.flatMap(SUCCESS_MAP));
         scounter.check("before succeed/succeed", 0, 0, 0);
         fcounter.bind(success.flatMap(FAIL_MAP));
@@ -97,7 +97,7 @@ public class FutureTest
         scounter.check("after succeed/succeed", 1, 0, 1);
         fcounter.check("after succeed/fail", 0, 1, 1);
 
-        const failure :Promise = Promise.create();
+        const failure :Promise = new Promise();
         scounter.bind(failure.flatMap(SUCCESS_MAP));
         fcounter.bind(failure.flatMap(FAIL_MAP));
         scounter.check("before fail/success", 0, 0, 0);
@@ -114,13 +114,13 @@ public class FutureTest
         const scounter :FutureCounter = new FutureCounter();
         const fcounter :FutureCounter = new FutureCounter();
 
-        {   const success :Promise = Promise.create();
-            const innerSuccessSuccess :Promise = Promise.create();
+        {   const success :Promise = new Promise();
+            const innerSuccessSuccess :Promise = new Promise();
             scounter.bind(success.flatMap(function (value :String) :Future {
                 return innerSuccessSuccess;
             }));
             scounter.check("before succeed/succeed", 0, 0, 0);
-            const innerSuccessFailure :Promise = Promise.create();
+            const innerSuccessFailure :Promise = new Promise();
             fcounter.bind(success.flatMap(function (value :String) :Future {
                 return innerSuccessFailure;
             }));
@@ -140,13 +140,13 @@ public class FutureTest
         }
 
         {
-            const failure :Promise = Promise.create();
-            const innerFailureSuccess :Promise = Promise.create();
+            const failure :Promise = new Promise();
+            const innerFailureSuccess :Promise = new Promise();
             scounter.bind(failure.flatMap(function (value :String) :Future {
                 return innerFailureSuccess;
             }));
             scounter.check("before fail/succeed", 0, 0, 0);
-            const innerFailureFailure :Promise = Promise.create();
+            const innerFailureFailure :Promise = new Promise();
             fcounter.bind(failure.flatMap(function (value :String) :Future {
                 return innerFailureFailure;
             }));
@@ -197,8 +197,8 @@ public class FutureTest
     public function testSequenceDeferred () :void {
         const counter :FutureCounter = new FutureCounter();
 
-        const success1 :Promise = Promise.create(), success2 :Promise = Promise.create();
-        const failure1 :Promise = Promise.create(), failure2 :Promise = Promise.create();
+        const success1 :Promise = new Promise(), success2 :Promise = new Promise();
+        const failure1 :Promise = new Promise(), failure2 :Promise = new Promise();
 
         const suc2seq :Future = Future.sequence([success1, success2]);
         counter.bind(suc2seq);

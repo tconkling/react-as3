@@ -38,7 +38,7 @@ public class Future {
      * the futures complete successfully, or a MultiFailureException aggregating all failures, if
      * any of the futures fail. */
     public static function sequence (futures :Array) :Future {
-        const pseq :Promise = Promise.create();
+        const pseq :Promise = new Promise();
         const seq :Sequencer = new Sequencer(pseq, futures.length);
         for (var ii :int = 0, len :int = futures.length; ii < len; ++ii) {
             var future :Future = futures[ii];
@@ -51,7 +51,7 @@ public class Future {
      * results are simply omitted from the list. The success results are also in no particular
      * order. If all of {@code futures} fail, the resulting list will be empty. */
     public static function collect (futures :Array) :Future { // Future<Array<T>>
-        const pseq :Promise = Promise.create();
+        const pseq :Promise = new Promise();
         const results :Array = [];
         var remain :int = futures.length;
         for each (var future :Future in futures) {
