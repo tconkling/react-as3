@@ -99,7 +99,7 @@ public class Future {
             call(slot, result.failure);
         }
         return this;
-    };
+    }
 
     /** Causes {@code slot} to be notified when this future is completed. If it has already
      * completed, the slot will be notified immediately.
@@ -109,10 +109,10 @@ public class Future {
         if (result == null) {
             _result.connect(slot);
         } else {
-            call(slot, result);
+            call(slot, result.value);
         }
         return this;
-    };
+    }
 
     /** Returns a value that indicates whether this future has completed. */
     public function get isComplete () :BoolView {
@@ -138,7 +138,7 @@ public class Future {
         return new Future(_result.mapToTry(function (result :Try) :Try {
             return (result == null ? null : result.map(func));
         }));
-    };
+    }
 
     /** Maps a successful result to a new result using {@link #func} when it arrives. Failure on
      * the original result or the mapped result are both dispatched to the mapped result. This is
@@ -155,7 +155,7 @@ public class Future {
             }
         });
         return new Future(mapped);
-    };
+    }
 
     public function Future (result :TryView) {
         _result = result;
@@ -213,7 +213,7 @@ class Sequencer {
     }
 
     protected var _pseq :Promise; // Promise<Array>
-    protected var _results :Array
+    protected var _results :Array;
     protected var _remain :int;
     protected var _error :MultiFailureError;
 }
