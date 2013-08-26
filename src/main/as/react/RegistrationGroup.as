@@ -26,13 +26,17 @@ public class RegistrationGroup
     }
 
     /** Closes all Registrations that have been added to the manager. */
-    public function close () :void {
+    public function clear () :void {
         var regs :Dictionary = _regs;
         _regs = new Dictionary();
 
         for (var r :Object in regs) {
             Registration(r).close();
         }
+    }
+
+    public function close () :void {
+        clear();
     }
 
     protected var _regs :Dictionary = new Dictionary();
