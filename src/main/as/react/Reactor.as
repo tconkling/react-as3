@@ -41,9 +41,13 @@ public /*abstract*/ class Reactor
      * there's zero chance of fucking up and this results in simpler, easier to read code.
      */
     protected function notify (notifier :Function, a1 :Object, a2 :Object, a3 :Object) :void {
-        if (_listeners == DISPATCHING) {
+        if (_listeners == null) {
+            // Bail early if we have no listeners
+            return;
+        } else if (_listeners == DISPATCHING) {
             throw new Error("Initiated notify while notifying");
         }
+
         var lners :Cons = _listeners;
         _listeners = DISPATCHING;
 
