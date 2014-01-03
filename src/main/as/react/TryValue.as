@@ -19,7 +19,7 @@ public class TryValue extends AbstractValue
 
     /**
      * Updates this instance with the supplied value. Registered listeners are notified only if the
-     * value differs from the current value, as determined via {@link Object#equals}.
+     * value differs from the current value.
      * @return the previous value contained by this instance.
      */
     public function set value (value :Try) :void {
