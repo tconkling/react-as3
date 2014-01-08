@@ -26,7 +26,7 @@ public /*abstract*/ class Try
     public static function lift (func :Function) :Function {
         return function (result :Try) :Object {
             return result.map(func);
-        }
+        };
     }
 
     /** Returns the value associated with a successful try, or rethrows the exception if the try

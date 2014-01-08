@@ -164,7 +164,7 @@ public class Future {
     protected static function addToSequenceCallback (seq :Sequencer, idx :int) :Function {
         return function (result :Try) :void {
             seq.onResult(idx, result);
-        }
+        };
     }
 
     protected static function call (f :Function, arg :Object) :void {
@@ -213,7 +213,7 @@ class Sequencer {
     }
 
     protected var _pseq :Promise; // Promise<Array>
-    protected var _results :Array
+    protected var _results :Array;
     protected var _remain :int;
     protected var _error :MultiFailureError;
 }

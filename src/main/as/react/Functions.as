@@ -40,7 +40,7 @@ public class Functions
     public static function constant (constant :Object) :Function {
         return function (value :Object) :Object {
             return constant;
-        }
+        };
     }
 
     /**
@@ -86,7 +86,7 @@ public class Functions
     public static function forDict (dict :Dictionary, defaultValue :Object) :Function {
         return function (key :Object) :Object {
             return (key in dict ? dict[key] : defaultValue);
-        }
+        };
     }
 }
 

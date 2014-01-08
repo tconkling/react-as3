@@ -81,7 +81,7 @@ internal class Cons implements Connection
             return removeAll(head.next, listener);
         } else {
             head.next = removeAll(head.next, listener);
-            return head
+            return head;
         }
     }
 

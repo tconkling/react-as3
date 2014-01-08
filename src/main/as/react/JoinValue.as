@@ -69,14 +69,12 @@ public class JoinValue extends AbstractValue
 }
 }
 
-import react.JoinValue;
 import react.BoolView;
 import react.Connection;
 import react.IntView;
+import react.JoinValue;
 import react.NumberView;
 import react.ObjectView;
-import react.Try;
-import react.TryView;
 import react.UintView;
 import react.ValueView;
 

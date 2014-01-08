@@ -42,7 +42,7 @@ public /*abstract*/ class MappedSignal extends AbstractSignal
         }
     }
 
-    protected var _conn :Connection
+    protected var _conn :Connection;
 }
 }
 
