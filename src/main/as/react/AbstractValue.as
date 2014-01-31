@@ -90,7 +90,7 @@ public /*abstract*/ class AbstractValue extends Reactor
     protected function updateAndNotify (value :Object, force :Boolean = true) :Object {
         checkMutate();
         var ovalue :Object = updateLocal(value);
-        if (force || value != ovalue) {
+        if (force || !valuesAreEqual(value, ovalue)) {
             emitChange(value, ovalue);
         }
         return ovalue;
@@ -116,6 +116,14 @@ public /*abstract*/ class AbstractValue extends Reactor
      */
     protected function updateLocal (value :Object) :Object {
         throw new IllegalOperationError();
+    }
+
+    /**
+     * Override to customize the comparison done in updateAndNotify to decide if an update will
+     * be performed if a force is not requested.
+     */
+    protected function valuesAreEqual (value1 :Object, value2 :Object) :Boolean {
+        return value1 == value2;
     }
 
     protected static function CHANGE (l :RListener, value :Object, oldValue :Object, _ :Object) :void {

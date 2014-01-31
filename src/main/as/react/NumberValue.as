@@ -45,6 +45,10 @@ public class NumberValue extends AbstractValue
         return oldValue;
     }
 
+    override protected function valuesAreEqual (value1 :Object, value2 :Object) :Boolean {
+        return value1 == value2 || (isNaN(Number(value1)) && isNaN(Number(value2)));
+    }
+
     protected var _value :Number;
 }
 }
