@@ -8,7 +8,7 @@ package react {
  * result. You can {@link #map} or {@link #flatMap} it, and listen for success or failure via the
  * {@link #success} and {@link #failure} signals.
  *
- * <p> The benefit over just using {@link Callback} is that results can be composed. You can
+ * <p> The benefit over just using a callback is that results can be composed. You can
  * subscribe to an object, flatmap the result into a service call on that object which returns the
  * address of another object, flat map that into a request to subscribe to that object, and finally
  * pass the resulting object to some other code via a slot. Failure can be handled once for all of
@@ -38,6 +38,11 @@ public class Future {
      * the futures complete successfully, or a MultiFailureException aggregating all failures, if
      * any of the futures fail. */
     public static function sequence (futures :Array) :Future {
+        // if we're passed an empty list of futures, succeed immediately with an empty list
+        if (futures.length == 0) {
+            return Future.success([]);
+        }
+
         const pseq :Promise = new Promise();
         const seq :Sequencer = new Sequencer(pseq, futures.length);
         for (var ii :int = 0, len :int = futures.length; ii < len; ++ii) {
@@ -51,6 +56,11 @@ public class Future {
      * results are simply omitted from the list. The success results are also in no particular
      * order. If all of {@code futures} fail, the resulting list will be empty. */
     public static function collect (futures :Array) :Future { // Future<Array<T>>
+        // if we're passed an empty list of futures, succeed immediately with an empty list
+        if (futures.length == 0) {
+            return Future.success([]);
+        }
+
         const pseq :Promise = new Promise();
         const results :Array = [];
         var remain :int = futures.length;
@@ -99,7 +109,7 @@ public class Future {
             call(slot, result.failure);
         }
         return this;
-    };
+    }
 
     /** Causes {@code slot} to be notified when this future is completed. If it has already
      * completed, the slot will be notified immediately.
@@ -112,7 +122,7 @@ public class Future {
             call(slot, result);
         }
         return this;
-    };
+    }
 
     /** Returns a value that indicates whether this future has completed. */
     public function get isComplete () :BoolView {
@@ -138,7 +148,7 @@ public class Future {
         return new Future(_result.mapToTry(function (result :Try) :Try {
             return (result == null ? null : result.map(func));
         }));
-    };
+    }
 
     /** Maps a successful result to a new result using {@link #func} when it arrives. Failure on
      * the original result or the mapped result are both dispatched to the mapped result. This is
@@ -155,7 +165,7 @@ public class Future {
             }
         });
         return new Future(mapped);
-    };
+    }
 
     public function Future (result :TryView) {
         _result = result;
