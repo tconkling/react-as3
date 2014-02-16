@@ -11,6 +11,8 @@ public class ReactTest extends Sprite
         signalTest();
         valueTest();
         futureTest();
+
+        trace("all tests passed");
     }
 
     protected function signalTest () :void {
