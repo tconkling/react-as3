@@ -38,6 +38,14 @@ public class JoinValue extends AbstractValue
         return new JoinObject(sources, map);
     }
 
+    public static function and (sources :Array) :BoolView {
+        return boolView(sources, AND);
+    }
+
+    public static function or (sources :Array) :BoolView {
+        return boolView(sources, OR);
+    }
+
     /**
      * Establishes a connection to our source value. Called when we go from zero to one listeners.
      * When we go from one to zero listeners, the connection will automatically be cleared.
@@ -63,6 +71,24 @@ public class JoinValue extends AbstractValue
             }
             _conns = null;
         }
+    }
+
+    protected static function AND (sources :Array) :Boolean {
+        for each (var source :ValueView in sources) {
+            if (!Boolean(source.get())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected static function OR (sources :Array) :Boolean {
+        for each (var source :ValueView in sources) {
+            if (Boolean(source.get())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected var _conns :Vector.<Connection>;
