@@ -15,6 +15,10 @@ public class AbstractSignal extends Reactor
         return MappedSignal.create(this, func);
     }
 
+    public function filter (pred :Function) :SignalView {
+        return new FilteredSignal(this, pred);
+    }
+
     public function connect (slot :Function) :Connection {
         return addConnection(slot);
     }

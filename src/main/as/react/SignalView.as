@@ -18,6 +18,13 @@ public interface SignalView
     function map (func :Function) :SignalView;
 
     /**
+     * Creates a signal that emits a value only when the supplied filter function returns true. The
+     * filtered signal will retain a connection to this signal for as long as it has connections of
+     * its own.
+     */
+    function filter (pred :Function) :SignalView;
+
+    /**
      * Connects this signal to the supplied function, such that when an event is emitted from this
      * signal, the function will be called.
      *
