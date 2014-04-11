@@ -4,10 +4,9 @@
 package react {
 
 /**
- * A view of a {@link Value}, to which listeners may be added, but which one cannot update. This
- * can be used in combination with {@link AbstractValue} to provide {@link Value} semantics to an
- * entity which dispatches value changes in a custom manner (like over the network). Value
- * consumers should require only a view on a value, rather than a concrete value.
+ * A view of a {@link AbstractValue} subclass, to which listeners may be added, but which one
+ * cannot update. Value consumers should require only a view on a value, rather than a
+ * concrete value.
  */
 public interface ValueView
 {

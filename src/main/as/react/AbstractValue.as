@@ -77,7 +77,7 @@ public /*abstract*/ class AbstractValue extends Reactor
 
     /**
      * Updates the value contained in this instance and notifies registered listeners iff said
-     * value is not equal to the value already contained in this instance (per {@link #areEqual}).
+     * value is not equal to the value already contained in this instance.
      */
     protected function updateAndNotifyIf (value :Object) :Object {
         return updateAndNotify(value, false);

@@ -4,7 +4,7 @@
 package react {
 
 /**
- * A signal that emits Objects. {@link Slot}s may be connected to a signal to be
+ * A signal that emits Objects. Callback functions may be connected to a signal to be
  * notified upon event emission.
  */
 public class Signal extends AbstractSignal
