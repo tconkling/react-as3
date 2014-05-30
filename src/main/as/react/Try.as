@@ -35,7 +35,7 @@ public /*abstract*/ class Try
 
     /** Returns the cause of failure for a failed try. Throws {@link IllegalOperationError} if
      * called on a successful try. */
-    public /*abstract*/ function get failure () :Error { return abstract(); }
+    public /*abstract*/ function get failure () :* { return abstract(); }
 
     /** Returns true if this is a successful try, false if it is a failed try. */
     public /*abstract*/ function get isSuccess () :Boolean { return abstract(); }
@@ -57,8 +57,6 @@ public /*abstract*/ class Try
 }
 
 import flash.errors.IllegalOperationError;
-import flash.events.ErrorEvent;
-import flash.utils.getQualifiedClassName;
 
 import react.Try;
 
@@ -72,7 +70,7 @@ class Success extends Try {
         return _value;
     }
 
-    override public function get failure () :Error {
+    override public function get failure () :* {
         throw new IllegalOperationError();
     }
 
@@ -97,16 +95,15 @@ class Success extends Try {
 
 /** Represents a failed try. Contains the cause of failure. */
 class Failure extends Try {
-
     public function Failure (cause :Object) {
-        _cause = resultToError(cause);
+        _cause = cause;
     }
 
-    override public function get value ():* {
-        throw _cause;
+    override public function get value () :* {
+        throw new IllegalOperationError();
     }
 
-    override public function get failure () :Error {
+    override public function get failure () :* {
         return _cause;
     }
 
@@ -126,26 +123,5 @@ class Failure extends Try {
         return "Failure(" + value + ")";
     }
 
-    protected static function resultToError (result :*) :Error {
-        if (result is Error) {
-            return result;
-        } else if (result is ErrorEvent) {
-            var ee :ErrorEvent = result as ErrorEvent;
-            return new Error("An ErrorEvent occurred [type=" +
-                getClassName(result) + ", message=" + ee.text + "]");
-        } else if (result is String) {
-            return new Error(result);
-        } else {
-            return new Error("An unknown failure occurred" +
-                (result != null ? " (" + result + ")" : ""));
-        }
-    }
-
-    protected static function getClassName (obj :Object) :String {
-        var name :String = getQualifiedClassName(obj);
-        var dex :int = name.lastIndexOf(".");
-        return name.substring(dex + 1); // works even if dex is -1
-    }
-
-    protected var _cause :Error;
+    protected var _cause :Object;
 }
