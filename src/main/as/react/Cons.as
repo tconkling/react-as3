@@ -54,7 +54,7 @@ internal class Cons implements Connection
     internal static function insert (head :Cons, cons :Cons) :Cons {
         if (head == null) {
             return cons;
-        } else if (head._priority > cons._priority) {
+        } else if (cons._priority > head._priority) {
             cons.next = head;
             return cons;
         } else {

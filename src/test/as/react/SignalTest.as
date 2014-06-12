@@ -47,10 +47,10 @@ public class SignalTest
         signal.connect(slot2.onEmit).atPriority(2);
         signal.connect(slot4.onEmit).atPriority(4);
         signal.emit();
-        assertEquals(1, slot1.order);
-        assertEquals(2, slot2.order);
-        assertEquals(3, slot3.order);
-        assertEquals(4, slot4.order);
+        assertEquals(4, slot1.order);
+        assertEquals(3, slot2.order);
+        assertEquals(2, slot3.order);
+        assertEquals(1, slot4.order);
     }
 
     public function testAddDuringDispatch () :void {
@@ -63,7 +63,7 @@ public class SignalTest
 
         // this will connect our new signal but not dispatch to it
         signal.emit(5);
-        assertEquals(0, toAdd.events.length)
+        assertEquals(0, toAdd.events.length);
 
         // now dispatch an event that should go to the added signal
         signal.emit(42);
