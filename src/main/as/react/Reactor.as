@@ -54,13 +54,16 @@ public /*abstract*/ class Reactor
         var error :Error = null;
         try {
             for (var cons :Cons = lners; cons != null; cons = cons.next) {
-                try {
-                    notifier(cons.listener, a1, a2, a3);
-                } catch (e :Error) {
-                    error = e;
-                }
-                if (cons.oneShot()) {
-                    cons.close();
+                // cons.listener will be null if Cons was closed after iteration started
+                if (cons.listener != null) {
+                    try {
+                        notifier(cons.listener, a1, a2, a3);
+                    } catch (e :Error) {
+                        error = e;
+                    }
+                    if (cons.oneShot()) {
+                        cons.close();
+                    }
                 }
             }
 

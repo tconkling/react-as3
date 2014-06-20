@@ -31,6 +31,7 @@ internal class Cons implements Connection
         if (_owner != null) {
             _owner.removeCons(this);
             _owner = null;
+            _listener = null;
         }
     }
 
