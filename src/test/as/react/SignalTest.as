@@ -85,12 +85,9 @@ public class SignalTest
         }).atPriority(1); // ensure that we're before toRemove
         signal.emit(42);
 
-        // since toRemove will have been removed during this dispatch, it will receive the signal
-        // in question, even though the higher priority signal triggered first
-        assertEquals(new <Object>[5, 42], toRemove.events);
-        // finally dispatch one more event and make sure toRemove didn't get it
-        signal.emit(9);
-        assertEquals(new <Object>[5, 42], toRemove.events);
+        // toRemove will have been removed during this dispatch, so it should not have received
+        // the signal
+        assertEquals(new <Object>[5], toRemove.events);
     }
 
     public function testAddAndRemoveDuringDispatch () :void {
