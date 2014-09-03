@@ -36,9 +36,7 @@ public /*abstract*/ class Reactor
     }
 
     /**
-     * Emits the supplied event to all connected slots. We omit a bunch of generic type shenanigans
-     * here and force the caller to just cast things, because this is all under the hood where
-     * there's zero chance of fucking up and this results in simpler, easier to read code.
+     * Emits the supplied event to all connected slots.
      */
     protected function notify (notifier :Function, a1 :Object, a2 :Object, a3 :Object) :void {
         if (_listeners == null) {
