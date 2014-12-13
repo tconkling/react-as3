@@ -14,6 +14,35 @@ import flash.errors.IllegalOperationError;
  */
 public class JoinValue extends AbstractValue
 {
+    /** Mapping function that computes the 'and' of its boolean sources */
+    public static const AND :Function = function (sources :Array) :Boolean {
+        for each (var source :ValueView in sources) {
+            if (!Boolean(source.get())) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    /** Mapping function that computes the 'or' of its boolean sources */
+    public static const OR :Function = function (sources :Array) :Boolean {
+        for each (var source :ValueView in sources) {
+            if (Boolean(source.get())) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /** Mapping function that computes the sum of its numeric sources */
+    public static const SUM :Function = function (sources :Array) :Number {
+        var sum :Number = 0;
+        for each (var source :ValueView in sources) {
+            sum += source.get();
+        }
+        return sum;
+    };
+
     public static function create (sources :Array, map :Function) :ValueView {
         return new JoinValueImpl(sources, map);
     }
@@ -36,14 +65,6 @@ public class JoinValue extends AbstractValue
 
     public static function objectView (sources :Array, map :Function) :ObjectView {
         return new JoinObject(sources, map);
-    }
-
-    public static function and (sources :Array) :BoolView {
-        return boolView(sources, AND);
-    }
-
-    public static function or (sources :Array) :BoolView {
-        return boolView(sources, OR);
     }
 
     /**
@@ -71,24 +92,6 @@ public class JoinValue extends AbstractValue
             }
             _conns = null;
         }
-    }
-
-    protected static function AND (sources :Array) :Boolean {
-        for each (var source :ValueView in sources) {
-            if (!Boolean(source.get())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    protected static function OR (sources :Array) :Boolean {
-        for each (var source :ValueView in sources) {
-            if (Boolean(source.get())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     protected var _conns :Vector.<Connection>;
