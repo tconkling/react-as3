@@ -67,6 +67,23 @@ public class FutureTest
         assertFalse(failure.hasConnections);
     }
 
+    public function testFlatMapValues () :void {
+        var finalValue :String = null;
+        var p1 :Promise = new Promise();
+        p1.flatMap(function (value :String) :Future {
+            return Future.success(value + "Bar");
+        })
+        .flatMap(function (value :String) :Future {
+            return Future.success(value + "Baz");
+        })
+        .onSuccess(function (value :String) :void {
+            finalValue = value;
+        });
+
+        p1.succeed("Foo");
+        assertEquals(finalValue, "FooBarBaz");
+    }
+
     public function testFlatMappedImmediate () :void {
         const scounter :FutureCounter = new FutureCounter();
         const fcounter :FutureCounter = new FutureCounter();

@@ -47,6 +47,7 @@ public class ReactTest extends Sprite
         suite.testDeferred();
         suite.testMappedImmediate();
         suite.testMappedDeferred();
+        suite.testFlatMapValues();
         suite.testFlatMappedImmediate();
         suite.testFlatMappedDeferred();
         suite.testFlatMappedDoubleDeferred();
