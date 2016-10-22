@@ -12,7 +12,7 @@ library created by Three Rings Design.
 Building
 --------
 
-The library is built using [Ant] and [Maven], or with [Flash Builder].
+The library is built using [Ant] (or with and IDE like [Flash Builder]).
 
 From the command line, invoke `ant` to build the library, or `ant maven-deploy`
 to build and deploy it to your local Maven repository.
@@ -29,7 +29,7 @@ To add a React-as3 dependency to a Maven project, add the following to your
       <dependency>
         <groupId>com.timconkling</groupId>
         <artifactId>react-as3</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.2.1</version>
       </dependency>
     </dependencies>
 
