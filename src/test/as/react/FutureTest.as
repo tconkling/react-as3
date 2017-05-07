@@ -258,6 +258,83 @@ public class FutureTest
         counter.check("after seq fail/fail", 0, 1, 1);
     }
 
+    public function testCollectEmpty () :void {
+        var counter :FutureCounter = new FutureCounter();
+        var seq :Future = Future.collect([]);
+        counter.bind(seq);
+        counter.check("collect empty list succeeds", 1, 0, 1);
+    }
+
+    public function testCollectImmediate () :void {
+        var counter :FutureCounter = new FutureCounter();
+
+        const success1 :Future = Future.success("Yay 1!");
+        const success2 :Future = Future.success("Yay 2!");
+
+        const failure1 :Future = Future.failure(new Error("Boo 1!"));
+        const failure2 :Future = Future.failure(new Error("Boo 2!"));
+
+        const sucCollect :Future = Future.collect([success1, success2]);
+        counter.bind(sucCollect);
+        sucCollect.onSuccess(function (results :Array) :void {
+            assertEquals(results.length, 2);
+        });
+        counter.check("immediate collect success/success", 1, 0, 1);
+
+        counter.bind(Future.collect([success1, failure1]));
+        counter.check("immediate collect success/failure", 1, 0, 1);
+
+        counter.bind(Future.collect([failure1, success2]));
+        counter.check("immediate collect failure/success", 1, 0, 1);
+
+        counter.bind(Future.collect([failure1, failure2]));
+        counter.check("immediate collect failure/failure", 1, 0, 1);
+    }
+
+    public function testCollectDeferred () :void {
+        const counter :FutureCounter = new FutureCounter();
+
+        const success1 :Promise = new Promise(), success2 :Promise = new Promise();
+        const failure1 :Promise = new Promise(), failure2 :Promise = new Promise();
+
+        const suc2Collect :Future = Future.collect([success1, success2]);
+        counter.bind(suc2Collect);
+        suc2Collect.onSuccess(function (results :Array) :void {
+            assertEquals(results.length, 2);
+        });
+        counter.check("before seq succeed/succeed", 0, 0, 0);
+        success1.succeed("Yay 1!");
+        success2.succeed("Yay 2!");
+        counter.check("after seq succeed/succeed", 1, 0, 1);
+
+        const sucfailCollect :Future = Future.collect([success1, failure1]);
+        sucfailCollect.onSuccess(function (results :Array) :void {
+            assertEquals(results.length, 1);
+            assertEquals(results[0], "Yay 1!");
+        });
+        counter.bind(sucfailCollect);
+        counter.check("before seq succeed/fail", 0, 0, 0);
+        failure1.fail(new Error("Boo 1!"));
+        counter.check("after seq succeed/fail", 1, 0, 1);
+
+        const failsucCollect :Future = Future.collect([failure1, success2]);
+        failsucCollect.onSuccess(function (results :Array) :void {
+            assertEquals(results.length, 1);
+            assertEquals(results[0], "Yay 2!");
+        });
+        counter.bind(failsucCollect);
+        counter.check("after seq fail/succeed", 1, 0, 1);
+
+        const fail2Collect :Future = Future.collect([failure1, failure2]);
+        fail2Collect.onSuccess(function (results :Array) :void {
+            assertEquals(results.length, 0);
+        });
+        counter.bind(fail2Collect);
+        counter.check("before seq fail/fail", 0, 0, 0);
+        failure2.fail(new Error("Boo 2!"));
+        counter.check("after seq fail/fail", 1, 0, 1);
+    }
+
     protected static function SUCCESS_MAP (value :String) :Future {
         return Future.success(value != null);
     }
