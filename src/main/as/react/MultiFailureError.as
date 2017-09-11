@@ -3,6 +3,9 @@
 
 package react {
 
+import flash.events.ErrorEvent;
+import flash.events.UncaughtErrorEvent;
+
 /**
  * An exception thrown to communicate multiple listener failures.
  */
@@ -23,12 +26,33 @@ public class MultiFailureError extends Error
             if (buf.length > 0) {
                 buf += ", ";
             }
-            buf += getClassName(failure) + ": " + failure.message;
+            buf += getMessageInternal(failure, false);
         }
         return "" + _failures.length + (_failures.length != 1 ? " failures: " : " failure: ") + buf;
     }
 
-    protected var _failures :Vector.<Object> = new Vector.<Object>();
+    private static function getMessageInternal (error :*, wantStackTrace :Boolean) :String {
+        // NB: do NOT use the class-cast operator for converting to typed error objects.
+        // Error() is a top-level function that creates a new error object, rather than performing
+        // a class-cast, as expected.
+
+        if (error is Error) {
+            var e :Error = (error as Error);
+            return (wantStackTrace ? e.getStackTrace() : e.message || "");
+        } else if (error is UncaughtErrorEvent) {
+            return getMessageInternal(error.error, wantStackTrace);
+        } else if (error is ErrorEvent) {
+            var ee :ErrorEvent = (error as ErrorEvent);
+            return getClassName(ee) +
+                " [errorID=" + ee.errorID +
+                ", type='" + ee.type + "'" +
+                ", text='" + ee.text + "']";
+        }
+
+        return "An error occurred: " + error;
+    }
+
+    private var _failures :Vector.<Object> = new Vector.<Object>();
 }
 
 }
