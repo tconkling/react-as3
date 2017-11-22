@@ -34,8 +34,8 @@ public class AbstractSignal extends Reactor
         notify(EMIT, event, null, null);
     }
 
-    protected static function EMIT (slot :RListener, event :Object, _1 :Object, _2 :Object) :void {
+    protected static const EMIT :Function = function (slot :RListener, event :Object, _1 :Object, _2 :Object) :void {
         slot.onEmit(event);
-    }
+    };
 }
 }
