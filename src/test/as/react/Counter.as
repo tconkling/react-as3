@@ -11,9 +11,11 @@ public class Counter  {
     public function trigger () :void {
         _count++;
     }
+
     public function assertTriggered (count :int, message :String = "") :void {
         assertEquals(count, _count, message);
     }
+
     public function reset () :void {
         _count = 0;
     }
