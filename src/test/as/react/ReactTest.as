@@ -12,6 +12,7 @@ public class ReactTest extends Sprite
         signalTest();
         valueTest();
         futureTest();
+        executorTest();
 
         trace("all tests passed");
     }
@@ -69,6 +70,13 @@ public class ReactTest extends Sprite
         suite.testCollectEmpty();
         suite.testCollectImmediate();
         suite.testCollectDeferred();
+    }
+
+    private function executorTest () :void {
+        var suite :ExecutorTest = new ExecutorTest();
+        suite.testSubmitImmediate();
+        suite.testSubmitFuture();
+        suite.testSubmitMany();
     }
 }
 }
