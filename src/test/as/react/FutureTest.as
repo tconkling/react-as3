@@ -32,8 +32,8 @@ public class FutureTest
         failure.fail(new Error("Boo!"));
         counter.check("after fail", 0, 1, 1);
 
-        assertFalse(success.hasConnections);
-        assertFalse(failure.hasConnections);
+        AssertX.isFalse(success.hasConnections);
+        AssertX.isFalse(failure.hasConnections);
     }
 
     public function testMappedImmediate () :void {
@@ -63,8 +63,8 @@ public class FutureTest
         failure.fail(new Error("Boo!"));
         counter.check("after fail", 0, 1, 1);
 
-        assertFalse(success.hasConnections);
-        assertFalse(failure.hasConnections);
+        AssertX.isFalse(success.hasConnections);
+        AssertX.isFalse(failure.hasConnections);
     }
 
     public function testFlatMapValues () :void {
@@ -81,7 +81,7 @@ public class FutureTest
         });
 
         p1.succeed("Foo");
-        assertEquals(finalValue, "FooBarBaz");
+        AssertX.equals(finalValue, "FooBarBaz");
     }
 
     public function testFlatMappedImmediate () :void {
@@ -123,8 +123,8 @@ public class FutureTest
         scounter.check("after fail/success", 0, 1, 1);
         fcounter.check("after fail/failure", 0, 1, 1);
 
-        assertFalse(success.hasConnections);
-        assertFalse(failure.hasConnections);
+        AssertX.isFalse(success.hasConnections);
+        AssertX.isFalse(failure.hasConnections);
     }
 
     public function testFlatMappedDoubleDeferred () :void {
@@ -151,9 +151,9 @@ public class FutureTest
             innerSuccessFailure.fail(new Error("Boo hoo!"));
             fcounter.check("after second succeed/fail", 0, 1, 1);
 
-            assertFalse(success.hasConnections);
-            assertFalse(innerSuccessSuccess.hasConnections);
-            assertFalse(innerSuccessFailure.hasConnections);
+            AssertX.isFalse(success.hasConnections);
+            AssertX.isFalse(innerSuccessSuccess.hasConnections);
+            AssertX.isFalse(innerSuccessFailure.hasConnections);
         }
 
         {
@@ -177,9 +177,9 @@ public class FutureTest
             innerFailureFailure.fail(new Error("Is this thing on?"));
             fcounter.check("after second fail/fail", 0, 1, 1);
 
-            assertFalse(failure.hasConnections);
-            assertFalse(innerFailureSuccess.hasConnections);
-            assertFalse(innerFailureFailure.hasConnections);
+            AssertX.isFalse(failure.hasConnections);
+            AssertX.isFalse(innerFailureSuccess.hasConnections);
+            AssertX.isFalse(innerFailureFailure.hasConnections);
         }
     }
 
@@ -195,9 +195,9 @@ public class FutureTest
         const sucseq :Future = Future.sequence([success1, success2]);
         counter.bind(sucseq);
         sucseq.onSuccess(function (results :Array) :void {
-            assertEquals(results.length, 2);
-            assertEquals(results[0], "Yay 1!");
-            assertEquals(results[1], "Yay 2!");
+            AssertX.equals(results.length, 2);
+            AssertX.equals(results[0], "Yay 1!");
+            AssertX.equals(results[1], "Yay 2!");
         });
         counter.check("immediate seq success/success", 1, 0, 1);
 
@@ -220,9 +220,9 @@ public class FutureTest
         const suc2seq :Future = Future.sequence([success1, success2]);
         counter.bind(suc2seq);
         suc2seq.onSuccess(function (results :Array) :void {
-            assertEquals(results.length, 2);
-            assertEquals(results[0], "Yay 1!");
-            assertEquals(results[1], "Yay 2!");
+            AssertX.equals(results.length, 2);
+            AssertX.equals(results[0], "Yay 1!");
+            AssertX.equals(results[1], "Yay 2!");
         });
         counter.check("before seq succeed/succeed", 0, 0, 0);
         success1.succeed("Yay 1!");
@@ -231,8 +231,8 @@ public class FutureTest
 
         const sucfailseq :Future = Future.sequence([success1, failure1]);
         sucfailseq.onFailure(function (cause :Error) :void {
-            assert(cause is MultiFailureError);
-            assertEquals("1 failure: Error: Boo 1!", cause.message);
+            AssertX.isTrue(cause is MultiFailureError);
+            AssertX.equals("1 failure: Error: Boo 1!", cause.message);
         });
         counter.bind(sucfailseq);
         counter.check("before seq succeed/fail", 0, 0, 0);
@@ -241,16 +241,16 @@ public class FutureTest
 
         const failsucseq :Future = Future.sequence([failure1, success2]);
         failsucseq.onFailure(function (cause :Error) :void {
-            assert(cause is MultiFailureError);
-            assertEquals("1 failure: Error: Boo 1!", cause.message);
+            AssertX.isTrue(cause is MultiFailureError);
+            AssertX.equals("1 failure: Error: Boo 1!", cause.message);
         });
         counter.bind(failsucseq);
         counter.check("after seq fail/succeed", 0, 1, 1);
 
         const fail2seq :Future = Future.sequence([failure1, failure2]);
         fail2seq.onFailure(function (cause :Error) :void {
-            assert(cause is MultiFailureError);
-            assertEquals("2 failures: Error: Boo 1!, Error: Boo 2!", MultiFailureError(cause).getMessage());
+            AssertX.isTrue(cause is MultiFailureError);
+            AssertX.equals("2 failures: Error: Boo 1!, Error: Boo 2!", MultiFailureError(cause).getMessage());
         });
         counter.bind(fail2seq);
         counter.check("before seq fail/fail", 0, 0, 0);
@@ -277,7 +277,7 @@ public class FutureTest
         const sucCollect :Future = Future.collect([success1, success2]);
         counter.bind(sucCollect);
         sucCollect.onSuccess(function (results :Array) :void {
-            assertEquals(results.length, 2);
+            AssertX.equals(results.length, 2);
         });
         counter.check("immediate collect success/success", 1, 0, 1);
 
@@ -300,7 +300,7 @@ public class FutureTest
         const suc2Collect :Future = Future.collect([success1, success2]);
         counter.bind(suc2Collect);
         suc2Collect.onSuccess(function (results :Array) :void {
-            assertEquals(results.length, 2);
+            AssertX.equals(results.length, 2);
         });
         counter.check("before seq succeed/succeed", 0, 0, 0);
         success1.succeed("Yay 1!");
@@ -309,8 +309,8 @@ public class FutureTest
 
         const sucfailCollect :Future = Future.collect([success1, failure1]);
         sucfailCollect.onSuccess(function (results :Array) :void {
-            assertEquals(results.length, 1);
-            assertEquals(results[0], "Yay 1!");
+            AssertX.equals(results.length, 1);
+            AssertX.equals(results[0], "Yay 1!");
         });
         counter.bind(sucfailCollect);
         counter.check("before seq succeed/fail", 0, 0, 0);
@@ -319,15 +319,15 @@ public class FutureTest
 
         const failsucCollect :Future = Future.collect([failure1, success2]);
         failsucCollect.onSuccess(function (results :Array) :void {
-            assertEquals(results.length, 1);
-            assertEquals(results[0], "Yay 2!");
+            AssertX.equals(results.length, 1);
+            AssertX.equals(results[0], "Yay 2!");
         });
         counter.bind(failsucCollect);
         counter.check("after seq fail/succeed", 1, 0, 1);
 
         const fail2Collect :Future = Future.collect([failure1, failure2]);
         fail2Collect.onSuccess(function (results :Array) :void {
-            assertEquals(results.length, 0);
+            AssertX.equals(results.length, 0);
         });
         counter.bind(fail2Collect);
         counter.check("before seq fail/fail", 0, 0, 0);

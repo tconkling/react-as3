@@ -10,7 +10,7 @@ public class SignalTest
 {
     public static function require (reqValue :Object) :Function {
         return function (value :Object) :void {
-            assertEquals(reqValue, value);
+            AssertX.equals(reqValue, value);
         };
     }
 
@@ -21,7 +21,7 @@ public class SignalTest
         signal.emit(1);
         signal.emit(2);
         signal.emit(3);
-        assertEquals(new <Object>[1, 2, 3], slot.events);
+        AssertX.equals(new <Object>[1, 2, 3], slot.events);
     }
 
     public function testOneShotSlot () :void {
@@ -31,7 +31,7 @@ public class SignalTest
         signal.emit(1); // slot should be removed after this emit
         signal.emit(2);
         signal.emit(3);
-        assertEquals(new <Object>[1], slot.events);
+        AssertX.equals(new <Object>[1], slot.events);
     }
 
     public function testSlotPriority () :void {
@@ -47,10 +47,10 @@ public class SignalTest
         signal.connect(slot2.onEmit).atPriority(2);
         signal.connect(slot4.onEmit).atPriority(4);
         signal.emit();
-        assertEquals(4, slot1.order);
-        assertEquals(3, slot2.order);
-        assertEquals(2, slot3.order);
-        assertEquals(1, slot4.order);
+        AssertX.equals(4, slot1.order);
+        AssertX.equals(3, slot2.order);
+        AssertX.equals(2, slot3.order);
+        AssertX.equals(1, slot4.order);
     }
 
     public function testAddDuringDispatch () :void {
@@ -63,11 +63,11 @@ public class SignalTest
 
         // this will connect our new signal but not dispatch to it
         signal.emit(5);
-        assertEquals(0, toAdd.events.length);
+        AssertX.equals(0, toAdd.events.length);
 
         // now dispatch an event that should go to the added signal
         signal.emit(42);
-        assertEquals(new <Object>[42], toAdd.events);
+        AssertX.equals(new <Object>[42], toAdd.events);
     }
 
     public function testRemoveDuringDispatch () :void {
@@ -77,7 +77,7 @@ public class SignalTest
 
         // dispatch one event and make sure it's received
         signal.emit(5);
-        assertEquals(new <Object>[5], toRemove.events);
+        AssertX.equals(new <Object>[5], toRemove.events);
 
         // now add our removing signal, and dispatch again
         signal.connect(function () :void {
@@ -87,7 +87,7 @@ public class SignalTest
 
         // toRemove will have been removed during this dispatch, so it should not have received
         // the signal
-        assertEquals(new <Object>[5], toRemove.events);
+        AssertX.equals(new <Object>[5], toRemove.events);
     }
 
     public function testAddAndRemoveDuringDispatch () :void {
@@ -98,7 +98,7 @@ public class SignalTest
 
         // dispatch one event and make sure it's received by toRemove
         signal.emit(5);
-        assertEquals(new <Object>[5], toRemove.events);
+        AssertX.equals(new <Object>[5], toRemove.events);
 
         // now add our adder/remover signal, and dispatch again
         signal.connect(function () :void {
@@ -107,13 +107,13 @@ public class SignalTest
         });
         signal.emit(42);
         // make sure toRemove got this event and toAdd didn't
-        assertEquals(new <Object>[5, 42], toRemove.events);
-        assertEquals(0, toAdd.events.length);
+        AssertX.equals(new <Object>[5, 42], toRemove.events);
+        AssertX.equals(0, toAdd.events.length);
 
         // finally emit one more and ensure that toAdd got it and toRemove didn't
         signal.emit(9);
-        assertEquals(new <Object>[9], toAdd.events);
-        assertEquals(new <Object>[5, 42], toRemove.events);
+        AssertX.equals(new <Object>[9], toAdd.events);
+        AssertX.equals(new <Object>[5, 42], toRemove.events);
     }
 
     public function testUnitSlot () :void {
@@ -123,11 +123,11 @@ public class SignalTest
             fired = true;
         });
         signal.emit(42);
-        assert(fired);
+        AssertX.isTrue(fired);
     }
 
     public function testSingleFailure () :void {
-        assertThrows(function () :void {
+        AssertX.throws(function () :void {
             var signal :UnitSignal = new UnitSignal();
             signal.connect(function () :void {
                 throw new Error("Bang!");
@@ -137,7 +137,7 @@ public class SignalTest
     }
 
     public function testMultiFailure () :void {
-        assertThrows(function () :void {
+        AssertX.throws(function () :void {
             var signal :UnitSignal = new UnitSignal();
             signal.connect(function () :void {
                 throw new Error("Bing!");
@@ -165,7 +165,7 @@ public class SignalTest
         // disconnect from the mapped signal and ensure that it clears its connection
         c1.close();
         c2.close();
-        assert(!signal.hasConnections);
+        AssertX.isTrue(!signal.hasConnections);
     }
 }
 
