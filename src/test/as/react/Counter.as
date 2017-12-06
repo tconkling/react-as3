@@ -13,7 +13,7 @@ public class Counter  {
     }
 
     public function assertTriggered (count :int, message :String = "") :void {
-        AssertX.equals(count, _count, message);
+        Assert.equals(count, _count, message);
     }
 
     public function reset () :void {

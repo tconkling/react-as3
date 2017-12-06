@@ -3,7 +3,7 @@
 
 package react {
 
-public class AssertX {
+public class Assert {
     public static function isTrue (condition :Boolean, failureMessage :String = "") :void {
         if (!condition) {
             throw new Error(failureMessage);
