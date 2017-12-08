@@ -46,6 +46,13 @@ public class FutureTest
         const failure :Future = Future.failure(new Error("Boo!"));
         counter.bind(failure.map(Functions.NON_NULL));
         counter.check("immediate failure", 0, 1, 1);
+
+        // Throwing an error in map() should result in a failure
+        const successToFail :Future = Future.success("Yay!");
+        counter.bind(successToFail.map(function (value :*) :String {
+            throw new Error("Boo!");
+        }));
+        counter.check("succeed-map-failure", 0, 1, 1);
     }
 
     public function testMappedDeferred () :void {

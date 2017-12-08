@@ -79,7 +79,11 @@ class Success extends Try {
     }
 
     override public function map (func :Function) :Try {
-        return Try.success(func(_value));
+        try {
+            return Try.success(func(_value));
+        } catch (e :Error) {
+            return Try.failure(e);
+        }
     }
 
     override public function flatMap (func :Function) :Try {
