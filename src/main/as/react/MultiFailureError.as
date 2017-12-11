@@ -16,7 +16,11 @@ public class MultiFailureError extends Error
     }
 
     public function addFailure (e :Object) :void {
-        _failures.push(e);
+        if (e is MultiFailureError) {
+            _failures = _failures.concat(MultiFailureError(e).failures);
+        } else {
+            _failures[_failures.length] = e;
+        }
         this.message = getMessage();
     }
 
