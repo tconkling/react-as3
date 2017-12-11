@@ -106,6 +106,19 @@ public class FutureTest
         fcounter.bind(failure.flatMap(FAIL_MAP));
         scounter.check("immediate failure/success", 0, 1, 1);
         scounter.check("immediate failure/failure", 0, 1, 1);
+
+        // Throwing an error in flatmap() should result in a failed Future
+        const success2 :Future = Future.success("Yay2!");
+        var finalValue :String = null;
+        const successToFlatMapError :Future = success2.flatMap(function (result :*) :Future {
+            throw new Error("FlatMap failure!");
+        }).onFailure(function (err :Error) :void {
+            finalValue = err.message;
+        });
+
+        fcounter.bind(successToFlatMapError);
+        fcounter.check("immediate success/thrown-error", 0, 1, 1);
+        Assert.equals(finalValue, "FlatMap failure!");
     }
 
     public function testFlatMappedDeferred () :void {
@@ -345,6 +358,7 @@ public class FutureTest
     protected static function SUCCESS_MAP (value :String) :Future {
         return Future.success(value != null);
     }
+
     protected static function FAIL_MAP (value :String) :Future {
         return Future.failure(new Error("Barzle!"));
     }

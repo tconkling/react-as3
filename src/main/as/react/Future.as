@@ -161,7 +161,14 @@ public class Future {
             } else if (result.isFailure) {
                 mapped.value = Try.failure(result.failure);
             } else {
-                Future(func(result.value)).onComplete(mapped.slot);
+                var mappedResult :Future;
+                try {
+                    mappedResult = func(result.value);
+                } catch (e :Error) {
+                    mapped.value = Try.failure(e);
+                    return;
+                }
+                mappedResult.onComplete(mapped.slot);
             }
         });
         return new Future(mapped);
