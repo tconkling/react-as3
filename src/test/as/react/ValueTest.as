@@ -73,16 +73,6 @@ public class ValueTest
         Assert.isTrue(fired);
     }
 
-    public function testListenNotify () :void {
-        var value :IntValue = new IntValue(42);
-        var fired :Boolean = false;
-        value.connectNotify(function (val :int) :void {
-            Assert.equals(42, val);
-            fired = true;
-        });
-        Assert.isTrue(fired);
-    }
-
     public function testDisconnect () :void {
         var value :IntValue = new IntValue(42);
         var expectedValue :int = value.get();

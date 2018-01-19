@@ -50,7 +50,6 @@ public class ReactTest extends Sprite
         suite.testAsOnceSignal();
         suite.testMappedValue();
         suite.testConnectNotify();
-        suite.testListenNotify();
         suite.testDisconnect();
         suite.testSlot();
     }
